@@ -1,12 +1,15 @@
 import request from 'axios';
-
 import api from './urls' ;
+
+import users from './users';
+
+export default {
+  users,
+};
 
 export const signIn = (email, password) => request.post(api.signIn, {email, password});
 export const verifySession = () => request.get(api.verifyJwt);
 export const signOut = () => console.log('todo get rid of me');
-
-export const register = (values) => request.post(api.users, values);
 
 export const getMaps = () => request.get(api.reliefMaps);
 export const createMap = () => console.log('todo get rid of me');

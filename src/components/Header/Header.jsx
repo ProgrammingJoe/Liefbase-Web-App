@@ -89,7 +89,7 @@ export default class Header extends Component {
 
   renderLoggedIn = () =>
     <div style={styles.rightGroup}>
-      <h4 style={styles.email}>{ 'Welcome ' + this.props.user.email }</h4>
+      <h4 style={styles.email}>{ 'Welcome TODO WELCOME MESSAGE' }</h4>
       <Button
         onClick={() => this.props.onClickCreateMap()}
         color="blue"
@@ -130,7 +130,8 @@ export default class Header extends Component {
         />
         <h1 style={{margin: '15px'}}>{ text.liefbase }</h1>
       </div>
-      { this.props.user.email ? this.renderLoggedIn() : this.renderLoggedOut() }
+      { false ? this.renderLoggedIn() : this.renderLoggedOut() }
     </div>
 
+    // todo remove false above
 }
