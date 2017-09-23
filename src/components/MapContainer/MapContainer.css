@@ -1,0 +1,16 @@
+.Map-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+/* react-leaflet-draw style override */
+.sr-only {
+    display: none;
+}
