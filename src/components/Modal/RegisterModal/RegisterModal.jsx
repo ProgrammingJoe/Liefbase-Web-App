@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import RegisterForm from "./components/RegisterForm";
+import RegisterForm from "./RegisterForm";
 
 const styles = {
   modal: {

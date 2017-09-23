@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import ReliefMapForm from './components/ReliefMapForm';
+import ReliefMapForm from './ReliefMapForm';
 
 const styles = {
   modal: {

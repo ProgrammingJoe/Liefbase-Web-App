@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import SignInForm from './components/SignInForm';
+import SignInForm from './SignInForm';
 
 const styles = {
   modal: {

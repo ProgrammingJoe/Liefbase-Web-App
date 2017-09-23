@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import UpdateEntityForm from './components/UpdateEntityForm';
+import UpdateEntityForm from './UpdateEntityForm';
 
 const styles = {
   modal: {

@@ -8,7 +8,7 @@ import { signOut, verifySession } from '../../redux/modules/user';
 import './Header.css';
 
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
-import HeaderButton from './components/HeaderButton';
+import HeaderButton from './HeaderButton';
 
 const text = {
   liefbase: 'liefbase',
