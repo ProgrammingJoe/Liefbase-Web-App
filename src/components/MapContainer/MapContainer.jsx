@@ -85,7 +85,6 @@ export default class MapContainer extends Component {
       this.leafletAttrib.leafletElement
           .addAttribution(this.props.tileMap.attribution);
     }
-    this.leafletMap.leafletElement.setMaxZoom(this.props.tileMap.maxZoom);
   }
 
   onClickMarker(id, type) {

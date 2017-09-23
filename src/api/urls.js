@@ -1,14 +1,55 @@
-export const signInURL = '/api/authenticate';
-export const signOutURL = '/api/logout';
-export const registerURL = '/api/users';
-export const getOrganizationsURL = '/api/organizations';
-export const createMapURL = '/api/reliefmaps'; // DEPRECATED!!!! delete once safe
-export const mapsURL = '/api/reliefmaps';
-export const getMapInfo = mapId => `/api/reliefmaps/${mapId}`;
-export const getMapHazardTemplatesURL = mapId => `${getMapInfo(mapId)}/hazardtemplates`;
-export const getMapResourceTemplatesURL = mapId => `${getMapInfo(mapId)}/resourcetemplates`;
+const signIn = '/api/token-auth/';
+const refreshJwt = '/api/token-refresh/';
+const verifyJwt = '/api/token-verify/';
 
-export const createHazardURL = (mapId) => `${getMapInfo(mapId)}/hazards`;
-export const createResourceURL = (mapId) => `${getMapInfo(mapId)}/resources`;
-export const hazardsURL = (hazardId) => `/api/hazards/${hazardId}`;
-export const resourcesURL = (resourceId) => `/api/resources/${resourceId}`;
+const filterPresets = '/api/filterpresets/';
+const filterPreset = id => `${filterPresets}${id}`;
+
+const mapItems = '/api/mapitems/';
+const mapItem = id => `${mapItems}${id}`;
+
+const mapItemTemplates = '/api/mapitemtemplates/';
+const mapItemTemplate = id => `${mapItemTemplates}${id}`;
+
+// TODO: find a way to add query parameters to urls nicely
+const memberships = '/api/memberships/';
+const membership = id => `${memberships}${id}`;
+
+const organizations = '/api/organizations/';
+const organization = id => `${organizations}${id}`;
+
+const reliefMaps = '/api/reliefmaps/';
+const reliefMap = id => `${reliefMaps}${id}`;
+
+const teams = '/api/teams/';
+const team = id => `${teams}${id}`;
+
+const templatePresets = '/api/templatepresets/';
+const templatePreset = id => `${templatePresets}${id}`;
+
+const users = '/api/users/';
+const user = id => `${users}${id}`;
+
+export default {
+  signIn,
+  refreshJwt,
+  verifyJwt,
+  filterPresets,
+  filterPreset,
+  mapItems,
+  mapItem,
+  mapItemTemplates,
+  mapItemTemplate,
+  memberships,
+  membership,
+  organizations,
+  organization,
+  reliefMaps,
+  reliefMap,
+  teams,
+  team,
+  templatePresets,
+  templatePreset,
+  users,
+  user,
+};

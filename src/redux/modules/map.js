@@ -160,7 +160,10 @@ export const getTemplates = (mapId) => (dispatch) => {
 
 export const selectMap = (id) => (dispatch, getState) => {
   const map = getState().map.maps.find((i) => i.id === id);
-  const entities = map.entities;
+  const entities = R.flatten(map.map_item_templates
+    .map(t => t.map_items.features));
+
+  console.log(entities);
 
   let lat1, lat2, lng1, lng2;
 
@@ -180,40 +183,18 @@ export const selectMap = (id) => (dispatch, getState) => {
   return dispatch(setSelectedMap(id));
 };
 
-export const getMaps = () => (dispatch) => {
+export const getMaps = () => async (dispatch) => {
   dispatch(pending());
-  return getMapsAPI()
-    .then(response => {
-      const mapResponse = R.map((i => ({
-        id: i.id,
-        name: i.name,
-        createdByUser: i.created_by_id,
-        createdAt: i.created_at,
-        updatedAt: i.updated_at,
-        description: i.description,
-        hazardTemplates: i.hazard_templates.reduce((acc, val) => ({...acc, [val.id]: val}), {}),
-        resourceTemplates: i.resource_templates.reduce((acc, val) => ({...acc, [val.id]: val}), {}),
-        entities: [
-          ...R.map(
-            r => ({...r, entityType: 'resource', status: 'pristine'}),
-            i.resources.features),
-          ...R.map(
-            r => ({...r, entityType: 'hazard', status: 'pristine'}),
-            i.hazards.features)
-        ],
-      })),response.data);
 
-      dispatch(clearStatus());
+  try {
+    const response = await getMapsAPI();
 
-      dispatch(success(mapResponse));
-
-      const selectedMapId = mapResponse.length > 0 ? mapResponse[0].id : undefined;
-      dispatch(selectMap(selectedMapId));
-    })
-    .catch(err => {
-      console.error(`Getmap error: ${err}`);
-      dispatch(error());
-    });
+    dispatch(clearStatus());
+    dispatch(success(response.data));
+  } catch(err) {
+    dispatch(error(err));
+    console.error(`getMaps error: ${err}`);
+  }
 };
 
 export const createEntity = (newEntity) => (dispatch, getState) => {

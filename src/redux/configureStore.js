@@ -3,10 +3,11 @@ import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import invariant from 'redux-immutable-state-invariant';
 
+import { reducer as formReducer } from 'redux-form';
+
 import drawer from './modules/drawer';
 import modal from './modules/modal';
 import organization from './modules/organization';
-import registration from './modules/registration';
 import user, { SIGN_OUT } from './modules/user';
 import map from './modules/map';
 
@@ -25,9 +26,9 @@ const appReducer = combineReducers({
   drawer,
   modal,
   organization,
-  registration,
   map,
   user,
+  form: formReducer,
 });
 
 const rootReducer = (state, action) => {

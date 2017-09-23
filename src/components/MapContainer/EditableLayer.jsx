@@ -14,27 +14,27 @@ import markerImagesMap from './MarkerImages';
 // Saving this for later as it could be useful when re-integrating the drawn shapes.
 // REMOVE IF STILL COMMENTED AND SHAPES CAN BE DRAWN!
 /* var getShapeType = function(layer) {
- * 
+ *
  *   if (layer instanceof L.Circle) {
  *         return 'circle';
  *     }
- * 
+ *
  *     if (layer instanceof L.Marker) {
  *         return 'marker';
  *     }
- * 
+ *
  *     if ((layer instanceof L.Polyline) && ! (layer instanceof L.Polygon)) {
  *         return 'polyline';
  *     }
- * 
+ *
  *     if ((layer instanceof L.Polygon) && ! (layer instanceof L.Rectangle)) {
  *         return 'polygon';
  *     }
- * 
+ *
  *     if (layer instanceof L.Rectangle) {
  *         return 'rectangle';
  *     }
- * 
+ *
  * };*/
 
 const createEntityObject = (
