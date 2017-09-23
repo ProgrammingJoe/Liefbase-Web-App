@@ -24,28 +24,58 @@ import {
 
 import EditableLayer from './EditableLayer';
 
-class MapContainer extends Component {
+import css from './MapContainer.css';
+
+const mapStateToProps = (state) => {
+  return {
+    maps: state.map.maps,
+    selectedMapId: state.map.selectedMapId,
+    tileMap: state.map.tileMaps[state.map.selectedTileMap],
+    position: state.map.position,
+    bounds: state.map.bounds,
+    entityFilter: state.map.entityFilter,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  getMaps: () => dispatch(getMaps()),
+  getMapTemplates: (mapId) => dispatch(getTemplates(mapId)),
+  updateEntity: (entity) => dispatch(modifyEntity(entity)),
+  createEntity: (payload) => dispatch(createEntity(payload)),
+  deleteEntity: (entity) => dispatch(deleteEntity(entity)),
+  deselectAllEntities: () => dispatch(deselectAllEntities()),
+  selectEntity: (id, type) => dispatch(selectEntity(id, type)),
+  showInfoDrawer: () => dispatch(showInfoDrawer()),
+  showUpdateEntityModal: (entity) => dispatch(showUpdateEntityModal(entity)),
+  clearBounds: () => dispatch(clearBounds()),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class MapContainer extends Component {
+  static propTypes = {
+    position: PropTypes.object,
+    bounds: PropTypes.array,
+    maps: PropTypes.array,
+    selectedMapId: PropTypes.number,
+    tileMap: PropTypes.object,
+    getMaps: PropTypes.func,
+    updateEntity: PropTypes.func,
+    createEntity: PropTypes.func,
+    deleteEntity: PropTypes.func,
+    deselectAllEntities: PropTypes.func,
+    selectEntity: PropTypes.func,
+    showInfoDrawer: PropTypes.func,
+    showUpdateEntityModal: PropTypes.func,
+    entityFilter: PropTypes.array,
+    clearBounds: PropTypes.func,
+  };
+
   onMapClick() {
     this.props.deselectAllEntities();
   }
 
   componentWillMount() {
     this.props.getMaps();
-  }
-
-  componentDidMount() {
-    const leafletMap = this.leafletMap.leafletElement;
-    this.map = leafletMap;
-    leafletMap.on('click', (e) => this.onMapClick(e));
-
-    window.L = L;
-    window.map = this.leafletMap.leafletElement;
-    this.forceUpdate();
-  }
-
-  componentWillUnmount() {
-    const leafletMap = this.leafletMap.leafletElement;
-    leafletMap.off('click', this.onMapClick);
   }
 
   componentDidUpdate(prevProps) {
@@ -65,7 +95,14 @@ class MapContainer extends Component {
     };
   }
 
-  render() {
+  renderMap() {
+    const leafletMap = this.leafletMap.leafletElement;
+    this.map = leafletMap;
+    leafletMap.on('click', (e) => this.onMapClick(e));
+
+    window.L = L;
+    window.map = this.leafletMap.leafletElement;
+
     const {
       maps,
       selectedMapId,
@@ -95,82 +132,50 @@ class MapContainer extends Component {
     }
 
     return (
-      <div className="Map-container">
-        <Map
-          viewport={this.props.position}
-          bounds={this.props.bounds}
-          animate
-          useFlyTo
-          ref={m => this.leafletMap = m}
-          id="map"
+      <Map
+        viewport={this.props.position}
+        bounds={this.props.bounds}
+        animate
+        useFlyTo
+        ref={m => this.leafletMap = m}
+        id={css.map}
 
-          onViewportChanged={this.props.clearBounds}
-          
-          zoomControl={false}
-          maxZoom={tileMap.maxZoom}
-          attributionControl={false}
-        >
-          <AttributionControl ref={m => this.leafletAttrib = m} />
-          <ZoomControl position="bottomright" />
-          <TileLayer
-            url={tileMap.url}
-            attribution={tileMap.attribution}
-          />
-          <EditableLayer
-            map={this.map}
-            entities={entities}
-            onUpdate={this.props.updateEntity}
-            onCreate={this.props.createEntity}
-            onDelete={this.props.deleteEntity}
-            showUpdateModal={this.props.showUpdateEntityModal}
-            onClickMarker={(id, type) => this.onClickMarker(id, type)}
-          />
-        </Map>
+        onViewportChanged={this.props.clearBounds}
+
+        zoomControl={false}
+        maxZoom={tileMap.maxZoom}
+        attributionControl={false}
+      >
+        <AttributionControl ref={m => this.leafletAttrib = m} />
+        <ZoomControl position="bottomright" />
+        <TileLayer
+          url={tileMap.url}
+          attribution={tileMap.attribution}
+        />
+        <EditableLayer
+          map={this.map}
+          entities={entities}
+          onUpdate={this.props.updateEntity}
+          onCreate={this.props.createEntity}
+          onDelete={this.props.deleteEntity}
+          showUpdateModal={this.props.showUpdateEntityModal}
+          onClickMarker={(id, type) => this.onClickMarker(id, type)}
+        />
+      </Map>
+    );
+  }
+
+  renderPlaceHolder = () =>
+    <div className={css.placeHolderContainer}>
+      <p>TODO: make a nice "no map selected" placeholder</p>
+    </div>
+
+  render() {
+    const { selectedMapId: mapExists } = this.props;
+    return (
+      <div className={css.mapContainer}>
+        { mapExists ? this.renderMap() : this.renderPlaceHolder() }
       </div>
     );
   }
 }
-
-MapContainer.propTypes = {
-  position: PropTypes.object,
-  bounds: PropTypes.array,
-  maps: PropTypes.array,
-  selectedMapId: PropTypes.number,
-  tileMap: PropTypes.object,
-  getMaps: PropTypes.func,
-  updateEntity: PropTypes.func,
-  createEntity: PropTypes.func,
-  deleteEntity: PropTypes.func,
-  deselectAllEntities: PropTypes.func,
-  selectEntity: PropTypes.func,
-  showInfoDrawer: PropTypes.func,
-  showUpdateEntityModal: PropTypes.func,
-  entityFilter: PropTypes.array,
-  clearBounds: PropTypes.func,
-};
-
-const mapStateToProps = (state) => {
-  return {
-    maps: state.map.maps,
-    selectedMapId: state.map.selectedMapId,
-    tileMap: state.map.tileMaps[state.map.selectedTileMap],
-    position: state.map.position,
-    bounds: state.map.bounds,
-    entityFilter: state.map.entityFilter,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  getMaps: () => dispatch(getMaps()),
-  getMapTemplates: (mapId) => dispatch(getTemplates(mapId)),
-  updateEntity: (entity) => dispatch(modifyEntity(entity)),
-  createEntity: (payload) => dispatch(createEntity(payload)),
-  deleteEntity: (entity) => dispatch(deleteEntity(entity)),
-  deselectAllEntities: () => dispatch(deselectAllEntities()),
-  selectEntity: (id, type) => dispatch(selectEntity(id, type)),
-  showInfoDrawer: () => dispatch(showInfoDrawer()),
-  showUpdateEntityModal: (entity) => dispatch(showUpdateEntityModal(entity)),
-  clearBounds: () => dispatch(clearBounds()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);

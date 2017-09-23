@@ -153,7 +153,7 @@ export const getTemplates = (mapId) => (dispatch) => {
       return dispatch(setMapTemplates(response.resources.data, response.hazards.data));
     })
     .catch(err => {
-      console.log('Get templates error', err);
+      console.error(`Get templates error: ${err}`);
       dispatch(error());
     });
 };
@@ -211,7 +211,7 @@ export const getMaps = () => (dispatch) => {
       dispatch(selectMap(selectedMapId));
     })
     .catch(err => {
-      console.log('Getmap error', err);
+      console.error(`Getmap error: ${err}`);
       dispatch(error());
     });
 };
@@ -230,7 +230,7 @@ export const createEntity = (newEntity) => (dispatch, getState) => {
       dispatch(addEntity(mapId, {...response.data, mapId, entityType: newEntity.entityType, status: 'pristine'}));
     })
     .catch(err => {
-      console.log('Create entity error:', err);
+      console.error(`Create entity error: ${err}`);
     });
 };
 
@@ -248,7 +248,7 @@ export const modifyEntity = updatedEntity => (dispatch, getState) => {
     })
     .catch(err => {
       dispatch(error());
-      console.log('Modify entity error', err);
+      console.error(`Modify entity error: ${err}`);
     });
 };
 
@@ -273,7 +273,7 @@ export const deleteEntity = (entity) => (dispatch, getState) => {
     })
     .catch(err => {
       dispatch(error());
-      console.log('Delete entity error', err);
+      console.error(`Delete entity error: ${err}`);
     });
 };
 
@@ -377,7 +377,7 @@ export const deleteMap = (id) => (dispatch) => {
       dispatch(removeMap(id));
     })
     .catch(err => {
-      debugger;
+      console.error(`Delete Map error: ${err}`);
       dispatch(error());
     });
 };
@@ -459,7 +459,7 @@ export default function reducer (state = initialState, action) {
         ...state.maps.slice(indexOfMapToDelete + 1),
       ];
     }
-    
+
     return {
       ...state,
       maps,
@@ -509,7 +509,7 @@ export default function reducer (state = initialState, action) {
         const v = i.properties.id === action.payload.properties.id && i.entityType === action.payload.entityType;
           return v;
       }, currentEntities);
-      
+
     const newState = {
       ...state,
       maps: [
