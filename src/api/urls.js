@@ -1,35 +1,38 @@
+const getAuthHeader = () => ({ 'Authorization': `jwt ${localStorage.getItem('token')}` });
+export const performWithAuth = (method, ...args) => method(...args, { headers: getAuthHeader() });
+
 const signIn = '/api/token-auth/';
 const refreshJwt = '/api/token-refresh/';
 const verifyJwt = '/api/token-verify/';
 
 const filterPresets = '/api/filterpresets/';
-const filterPreset = id => `${filterPresets}${id}`;
+const filterPreset = id => `${filterPresets}${id}/`;
 
 const mapItems = '/api/mapitems/';
-const mapItem = id => `${mapItems}${id}`;
+const mapItem = id => `${mapItems}${id}/`;
 
 const mapItemTemplates = '/api/mapitemtemplates/';
-const mapItemTemplate = id => `${mapItemTemplates}${id}`;
+const mapItemTemplate = id => `${mapItemTemplates}${id}/`;
 
 // TODO: find a way to add query parameters to urls nicely
 const memberships = '/api/memberships/';
-const membership = id => `${memberships}${id}`;
+const membership = id => `${memberships}${id}/`;
 
 const organizations = '/api/organizations/';
-const organization = id => `${organizations}${id}`;
+const organization = id => `${organizations}${id}/`;
 
 const reliefMaps = '/api/reliefmaps/';
-const reliefMap = id => `${reliefMaps}${id}`;
+const reliefMap = id => `${reliefMaps}${id}/`;
 
 const teams = '/api/teams/';
-const team = id => `${teams}${id}`;
+const team = id => `${teams}${id}/`;
 
 const templatePresets = '/api/templatepresets/';
-const templatePreset = id => `${templatePresets}${id}`;
+const templatePreset = id => `${templatePresets}${id}/`;
 
 const users = '/api/users/';
-const user = id => `${users}${id}`;
-const currentUser = '/api/currentuser';
+const user = id => `${users}${id}/`;
+const currentUser = `${users}me/`;
 
 export default {
   signIn,

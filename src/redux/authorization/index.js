@@ -3,28 +3,33 @@ import api from '../../api';
 import { getSuccess as getUserSuccess } from '../entities/users';
 
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
-const SIGN_OUT = 'SIGN_OUT';
+const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 
 const signInSuccess = (payload) => ({
   type: SIGN_IN_SUCCESS,
   payload,
 });
 
-export const signOut = () => ({
-  type: SIGN_OUT,
+const signOutSuccess = () => ({
+  type: SIGN_OUT_SUCCESS,
 });
+
+export const signOut = () => dispatch => {
+  localStorage.removeItem('token');
+  dispatch(signOutSuccess());
+};
 
 // ex. values = { username, password }
 export const signIn = (values) => {
   return async dispatch => {
-    // returns { token }
     const response = await api.authorization.signIn(values);
-    console.log(response);
-    // todo: save token and wrap future requests with it.
 
-    const user = await api.users.getCurrent();
-    dispatch(signInSuccess(user));
-    dispatch(getUserSuccess(user));
+    localStorage.setItem('token', response.data.token);
+
+    const userResponse = await api.users.getCurrent();
+
+    dispatch(signInSuccess(userResponse.data));
+    dispatch(getUserSuccess(userResponse.data));
   };
 };
 
@@ -37,8 +42,8 @@ export const verify = (values) => {
 export const refresh = (values) => {
   return async dispatch => {
     try {
-      await api.authorization.refresh(values);
-      // todo: refresh saved token
+      const response = await api.authorization.refresh(values);
+      localStorage.setItem('token', response.data.token);
     } catch (err) {
       dispatch(signOut());
     }
@@ -57,7 +62,7 @@ export default function reducer(state = initialState, action) {
       currentUserId: action.payload.id,
     };
 
-  case SIGN_OUT:
+  case SIGN_OUT_SUCCESS:
     return {
       ...state,
       currentUserId: undefined,

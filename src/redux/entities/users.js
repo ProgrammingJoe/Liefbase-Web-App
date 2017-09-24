@@ -1,5 +1,7 @@
 import api from '../../api';
 
+import { signIn } from '../authorization';
+
 const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 const LIST_USERS_SUCCESS = 'LIST_USERS_SUCCESS';
 const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
@@ -46,10 +48,13 @@ export const list = () => {
   };
 };
 
+
+// current only called through registration so login the new user!
 export const create = (values) => {
   return async (dispatch) => {
     const response = await api.users.create(values);
     dispatch(createSuccess(response.data));
+    dispatch(signIn(values));
   };
 };
 
@@ -64,6 +69,8 @@ export const destroy = (values) => {
   return async (dispatch) => {
     await api.users.destroy(values);
     dispatch(destroySuccess(values));
+
+    // todo: call signOut if destroyed state.authorization.currentuser
   };
 };
 

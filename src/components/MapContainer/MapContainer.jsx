@@ -55,7 +55,7 @@ export default class MapContainer extends Component {
   static propTypes = {
     position: PropTypes.object,
     bounds: PropTypes.array,
-    maps: PropTypes.array,
+    maps: PropTypes.object,
     selectedMapId: PropTypes.number,
     tileMap: PropTypes.object,
     getMaps: PropTypes.func,

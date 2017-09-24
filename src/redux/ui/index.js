@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import drawer from './drawer';
-import modal from './drawer';
+import modal from './modal';
 
 const reducers = {
   drawer,

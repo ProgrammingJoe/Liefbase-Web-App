@@ -163,8 +163,6 @@ export const selectMap = (id) => (dispatch, getState) => {
   const entities = R.flatten(map.map_item_templates
     .map(t => t.map_items.features));
 
-  console.log(entities);
-
   let lat1, lat2, lng1, lng2;
 
   for (let entity of entities) {
