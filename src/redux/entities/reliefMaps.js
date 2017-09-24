@@ -11,7 +11,7 @@ import {
   deleteResourceAPI,
   deleteMapAPI,
 } from '../../api';
-import { hideModal } from './modal';
+import { hideModal } from '../ui/modal';
 
 import { clamp } from '../../util/Numbers';
 import R from 'ramda';

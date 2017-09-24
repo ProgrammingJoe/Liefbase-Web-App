@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { hideModal } from '../../redux/modules/modal';
-import { createMap, updateMap } from '../../redux/modules/map';
+import { hideModal } from '../../redux/ui/modal';
+import { createMap, updateMap } from '../../redux/entities/reliefMaps';
 
 import SignInModal from './SignInModal';
 import RegisterModal from './RegisterModal';
@@ -19,13 +19,13 @@ const ModalManager = props => {
     return <RegisterModal title="Register" {...props} />;
 
   case 'CREATE_MAP':
-    return <ReliefMapModal 
+    return <ReliefMapModal
             title="Create Map"
             handleSubmit={props.createMap}
             {...props} />;
 
   case 'EDIT_MAP_DETAILS':
-    return <ReliefMapModal 
+    return <ReliefMapModal
             title="Update Map Details"
             handleSubmit={props.updateMap}
             name={props.selectedMap.name}
@@ -48,10 +48,11 @@ ModalManager.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const selectedMap = state.map.maps.find((m) => m.id === state.map.selectedMapId);
-  
+  const id = state.ui.reliefMapId;
+  const selectedMap = state.entities.reliefMaps[id];
+
   return {
-    modalType: state.modal.modalType,
+    modalType: state.ui.modal.modalType,
     selectedMap
   };
 };

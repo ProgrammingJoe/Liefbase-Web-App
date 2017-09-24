@@ -15,12 +15,12 @@ import {
   deleteEntity,
   deselectAllEntities,
   selectEntity,
-  clearBounds } from '../../redux/modules/map';
-import { showInfo as showInfoDrawer } from '../../redux/modules/drawer';
+  clearBounds } from '../../redux/entities/reliefMaps';
+import { showInfo as showInfoDrawer } from '../../redux/ui/drawer';
 
 import {
   showUpdateEntity as showUpdateEntityModal
-} from '../../redux/modules/modal';
+} from '../../redux/ui/modal';
 
 import EditableLayer from './EditableLayer';
 
@@ -28,12 +28,12 @@ import css from './MapContainer.css';
 
 const mapStateToProps = (state) => {
   return {
-    maps: state.map.maps,
-    selectedMapId: state.map.selectedMapId,
-    tileMap: state.map.tileMaps[state.map.selectedTileMap],
-    position: state.map.position,
-    bounds: state.map.bounds,
-    entityFilter: state.map.entityFilter,
+    maps: state.entities.reliefMaps,
+    selectedMapId: state.ui.reliefMapId,
+    tileMap: state.ui.tileMap,
+    position: state.ui.position,
+    bounds: state.ui.bounds,
+    entityFilter: state.ui.entityFilter,
   };
 };
 
@@ -79,6 +79,8 @@ export default class MapContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (!prevProps.tileMap || !this.props.tileMap) return; // todo fix this.
+
     if(prevProps.tileMap.attribution !== this.props.tileMap.attribution){
       this.leafletAttrib.leafletElement
           .removeAttribution(prevProps.tileMap.attribution);

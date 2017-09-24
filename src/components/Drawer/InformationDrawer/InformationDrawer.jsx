@@ -8,7 +8,7 @@ import { round } from '../../../util/Numbers';
 import {
   setPosition as setMapPosition,
   deleteEntity,
-} from '../../../redux/modules/map';
+} from '../../../redux/entities/reliefMaps';
 
 import DrawerWrapper from '../DrawerWrapper';
 
@@ -28,7 +28,7 @@ class InformationDrawer extends Component {
           { map(i => {
             const { name, category, unit } = this.props[`${i.entityType}Templates`][i.properties.template_id];
             const quantity = i.properties.quantity;
-            
+
             return (
               <div key={i.properties.id}>
                 <p>Name:&nbsp;{name}</p>
@@ -54,16 +54,15 @@ InformationDrawer.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const selectedMap = state.map.maps.find(i => i.id === state.map.selectedMapId);
-  const entities = selectedMap ? selectedMap.entities : [];
-return ({
-  selectedMap,
-  selectedEntities: entities.filter(i => {
-                               const { id: selectedId, type: selectedType } = state.map.selectedEntities;
-                               return i.properties.id === selectedId && i.entityType === selectedType;
-                             }),
-  hazardTemplates: selectedMap ? selectedMap.hazardTemplates : {},
-  resourceTemplates: selectedMap ? selectedMap.resourceTemplates : {},
+  const id = state.ui.reliefMapId;
+  const selectedMap = state.entities.reliefMaps[id];
+
+  const entities = []; // todo fix this.
+
+  return ({
+    selectedMap,
+    selectedEntities: entities, // todo fix this.
+    templates: selectedMap.map_item_templates,
 });
 };
 

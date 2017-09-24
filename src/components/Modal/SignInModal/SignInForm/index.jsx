@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Input, Form } from 'semantic-ui-react';
 
-import {
-  signIn,
-  clearStatus,
-} from '../../../../redux/modules/user';
+import { signIn } from '../../../../redux/authorization';
 
 const styles = {
   container: {
@@ -33,10 +30,6 @@ const styles = {
 class SignInForm extends Component {
   componentDidMount() {
     this.email.focus();
-  }
-
-  componentWillUnmount() {
-    this.props.clearStatus();
   }
 
   handleSubmit(e) {
@@ -90,7 +83,6 @@ SignInForm.propTypes = {
   signIn: PropTypes.func,
   pending: PropTypes.bool,
   error: PropTypes.string,
-  clearStatus: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -103,7 +95,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   signIn: (email, password) => dispatch(signIn(email, password)),
-  clearStatus: () => dispatch(clearStatus()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInForm);

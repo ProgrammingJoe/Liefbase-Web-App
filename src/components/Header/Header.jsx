@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { showSignIn, showRegister, showCreateMap } from '../../redux/modules/modal';
-import { showMap, showSearch, showInfo, hideDrawer } from '../../redux/modules/drawer';
-import { signOut, verifySession } from '../../redux/modules/user';
+import { showSignIn, showRegister, showCreateMap } from '../../redux/ui/modal';
+import { showMap, showSearch, showInfo, hideDrawer } from '../../redux/ui/drawer';
+import {
+  signOut,
+  refresh as refreshSession
+} from '../../redux/authorization';
 
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import HeaderButton from './HeaderButton';
@@ -46,10 +49,11 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
+  const id = state.ui.userId;
   return {
-    user: state.user,
-    modal: state.modal,
-    drawer: state.drawer.drawerType,
+    user: state.entities.users[id],
+    modal: state.ui.modal,
+    drawer: state.ui.drawer.drawerType,
   };
 };
 
@@ -63,7 +67,7 @@ const mapDispatchToProps = (dispatch) => {
     openSearchDrawer: () => dispatch(showSearch()),
     openInfoDrawer: () => dispatch(showInfo()),
     hideDrawer: () => dispatch(hideDrawer()),
-    verifySession: () => dispatch(verifySession()),
+    refreshSession: () => dispatch(refreshSession()),
   };
 };
 
@@ -80,11 +84,11 @@ export default class Header extends Component {
     openInfoDrawer: PropTypes.func,
     openMapSettingsDrawer: PropTypes.func,
     openSearchDrawer: PropTypes.func,
-    verifySession: PropTypes.func,
+    refreshSession: PropTypes.func,
   };
 
   componentWillMount() {
-    this.props.verifySession();
+    this.props.refreshSession();
   }
 
   renderLoggedIn = () =>

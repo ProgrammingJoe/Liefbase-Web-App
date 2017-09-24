@@ -29,6 +29,7 @@ const templatePreset = id => `${templatePresets}${id}`;
 
 const users = '/api/users/';
 const user = id => `${users}${id}`;
+const currentUser = '/api/currentuser';
 
 export default {
   signIn,
@@ -52,4 +53,5 @@ export default {
   templatePreset,
   users,
   user,
+  currentUser,
 };

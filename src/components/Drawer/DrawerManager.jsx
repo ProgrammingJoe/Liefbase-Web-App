@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { hideDrawer } from '../../redux/modules/drawer';
+import { hideDrawer } from '../../redux/ui/drawer';
 import SearchDrawer from './SearchDrawer';
 import MapDrawer from  './MapDrawer';
 import InformationDrawer from './InformationDrawer';
@@ -21,7 +21,7 @@ DrawerManager.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  type: state.drawer.drawerType,
+  type: state.ui.drawer.drawerType,
 });
 
 const mapDispatchToProps = dispatch => ({

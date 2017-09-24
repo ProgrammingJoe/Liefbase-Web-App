@@ -1,43 +1,98 @@
 import api from '../../api';
 
+const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+const LIST_USERS_SUCCESS = 'LIST_USERS_SUCCESS';
+const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
+const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+const DESTROY_USER_SUCCESS = 'DESTROY_USER_SUCCESS';
+
+
+export const getSuccess = (payload) => ({
+  type: GET_USER_SUCCESS,
+  payload,
+});
+
+const listSuccess = (payload) => ({
+  type: LIST_USER_SUCCESS,
+  payload,
+});
+
+const createSuccess = (payload) => ({
+  type: CREATE_USER_SUCCESS,
+  payload,
+});
+
+const updateSuccess = (payload) => ({
+  type: UPDATE_USER_SUCCESS,
+  payload,
+});
+
+const destroySuccess = (payload) => ({
+  type: DESTROY_USER_SUCCESS,
+  payload,
+});
+
 export const get = (id) => {
   return async (dispatch) => {
     const response = await api.users.get(id);
-    console.log(response);
+    dispatch(getSuccess(response.data));
   };
 };
 
 export const list = () => {
   return async (dispatch) => {
     const response = await api.users.list();
-    console.log(response);
+    dispatch(listSuccess(response.data));
   };
 };
 
 export const create = (values) => {
   return async (dispatch) => {
     const response = await api.users.create(values);
-    console.log(response);
+    dispatch(createSuccess(response.data));
   };
 };
 
 export const update = (values) => {
   return async (dispatch) => {
     const response = await api.users.update(values);
-    console.log(response);
+    dispatch(updateSuccess(response.data));
   };
 };
 
 export const destroy = (values) => {
   return async (dispatch) => {
-    const response = await api.users.destroy(values);
-    console.log(response);
+    await api.users.destroy(values);
+    dispatch(destroySuccess(values));
   };
 };
 
 const initialState = { };
 
 export default function reducer(state = initialState, action) {
-  // TODO: make action creators and reduce some state.
+  switch(action.type) {
+  case GET_USER_SUCCESS:
+  case CREATE_USER_SUCCESS:
+  case UPDATE_USER_SUCCESS:
+    return {
+      ...state,
+      [action.payload.id]: action.payload
+    };
+
+  case DESTROY_USER_SUCCESS:
+    // pull the deleted user out of state.
+    // eslint-disable-next-line no-unused-vars
+    const {[action.payload.id]: _, ...newState } = state;
+    return newState;
+
+  case LIST_USERS_SUCCESS:
+    const users = {};
+    action.payload.forEach((user) => users[user.id] = user);
+    return {
+      ...state,
+      ...users,
+    };
+  }
+
   return state;
 }

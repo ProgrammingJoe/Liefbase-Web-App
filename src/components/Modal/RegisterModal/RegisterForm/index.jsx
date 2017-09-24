@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import { create as createUser } from '../../../../redux/entities/users';
-import { hideModal } from '../../../../redux/modules/modal';
+import { hideModal } from '../../../../redux/ui/modal';
 
 import isEmail from 'validator/lib/isEmail';
 

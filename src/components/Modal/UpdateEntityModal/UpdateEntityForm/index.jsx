@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Dropdown, Button } from 'semantic-ui-react';
 
-import { hideModal } from '../../../../redux/modules/modal';
-import { getTemplates, createEntity } from '../../../../redux/modules/map';
+import { hideModal } from '../../../../redux/ui/modal';
+import { getTemplates, createEntity } from '../../../../redux/entities/reliefMaps';
 
 const styles = {
   container: {

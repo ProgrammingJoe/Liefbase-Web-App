@@ -9,7 +9,7 @@ import {
   unsetEntityFilter,
   clearEntityFilters,
   setAllEntityFilters,
-} from '../../../redux/modules/map';
+} from '../../../redux/entities/reliefMaps';
 import DrawerWrapper from '../DrawerWrapper';
 import EntityTemplateFilter from './EntityTemplateFilter';
 import R from 'ramda';
@@ -42,7 +42,7 @@ class MapDrawer extends Component {
     return (
       <DrawerWrapper { ...this.props }>
         <div style={ styles.container }>
-          <Dropdown fluid selection 
+          <Dropdown fluid selection
             options={ tileMapOptions }
             defaultValue={ selectedTileMap }
             placeholder='Tile Map Selection'
@@ -76,17 +76,14 @@ MapDrawer.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const selectedMap = state.map.maps.find(i => i.id === state.map.selectedMapId);
+  const id = state.ui.reliefMapId;
+  const selectedMap = state.entities.reliefMaps[id];
 
-  const hazardTemplates = selectedMap ? selectedMap.hazardTemplates : {};
-  const resourceTemplates = selectedMap ? selectedMap.resourceTemplates : {};
   return {
-    tileMaps: state.map.tileMaps,
-    selectedTileMap: state.map.selectedTileMap,
+    tileMaps: state.ui.tileMaps,
+    selectedTileMap: state.ui.selectedTileMap,
     selectedMap,
-    hazardTemplates,
-    resourceTemplates,
-    entityFilter: state.map.entityFilter,
+    entityFilter: state.ui.entityFilter,
   };
 };
 

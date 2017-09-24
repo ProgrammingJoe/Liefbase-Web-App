@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Input, Menu, Icon } from 'semantic-ui-react';
 
-import { selectMap, deleteMap } from '../../../redux/modules/map';
-import { showEditMapDetails } from '../../../redux/modules/modal';
-import { setSearchText } from '../../../redux/modules/drawer';
+import { selectMap, deleteMap } from '../../../redux/entities/reliefMaps';
+import { showEditMapDetails } from '../../../redux/ui/modal';
+import { setSearchText } from '../../../redux/ui/drawer';
 
 import DrawerWrapper from '../DrawerWrapper';
 
@@ -28,8 +28,8 @@ class SearchDrawer extends Component {
     return (
       <DrawerWrapper { ...this.props }>
         <div style={ styles.container }>
-          <Input 
-            placeholder="Search..." 
+          <Input
+            placeholder="Search..."
             icon="search"
             onChange={ (e, data) => this.props.setSearchText(data.value) }
             value={ this.props.searchText }
@@ -39,7 +39,7 @@ class SearchDrawer extends Component {
           { this.props.maps
             .filter((map) => map.name.toLowerCase().includes(
               this.props.searchText.toLowerCase()))
-            .map((map) => 
+            .map((map) =>
               <div key={ map.id }>
                 <Menu.Item
                   name={ map.name }
@@ -48,12 +48,12 @@ class SearchDrawer extends Component {
                   style={{ textAlign: 'left' }}
                 >
                   {map.name}
-                  <Icon 
-                    name='delete' 
+                  <Icon
+                    name='delete'
                     color='red'
                     onClick={ () => this.props.deleteMap(map.id) }
                   />
-                  <Icon 
+                  <Icon
                     name='edit'
                     color='blue'
                     onClick={ () => this.props.editMapDetails(map.id) }
@@ -73,7 +73,7 @@ SearchDrawer.propTypes = {
   maps: PropTypes.array,
   selectedMapId: PropTypes.number,
   searchText: PropTypes.string,
-  
+
   selectMap: PropTypes.func,
   setSearchText: PropTypes.func,
   deleteMap: PropTypes.func,
@@ -81,9 +81,9 @@ SearchDrawer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  maps: state.map.maps,
-  selectedMapId: state.map.selectedMapId,
-  searchText: state.drawer.searchText,
+  maps: state.entities.reliefMaps,
+  selectedMapId: state.ui.reliefMapId,
+  searchText: state.ui.drawer.searchText,
 });
 
 const mapDispatchToProps = (dispatch) => ({

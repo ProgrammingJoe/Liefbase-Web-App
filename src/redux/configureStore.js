@@ -5,12 +5,9 @@ import invariant from 'redux-immutable-state-invariant';
 
 import { reducer as form } from 'redux-form';
 
-import drawer from './modules/drawer';
-import modal from './modules/modal';
-import organization from './modules/organization';
-import map from './modules/map';
-
+import ui from './ui';
 import entities from './entities';
+import authorization from './authorization';
 
 const loggerMiddleware = createLogger();
 
@@ -20,16 +17,14 @@ const createStoreWithMiddleware = compose(
    * Conditionally add the Redux DevTools extension enhancer
    * if it is installed.
    */
-  window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
+  //window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
 )(createStore);
 
 const appReducer = combineReducers({
-  drawer,
-  modal,
-  organization,
-  map,
+  authorization,
   entities,
   form,
+  ui,
 });
 
 const rootReducer = (state, action) => {
@@ -37,4 +32,5 @@ const rootReducer = (state, action) => {
 };
 
 const configureStore = (initialState) => createStoreWithMiddleware(rootReducer, initialState);
+
 export default configureStore;
