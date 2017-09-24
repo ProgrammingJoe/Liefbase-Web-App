@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import { create as createUser } from '../../../../redux/entities/users';
@@ -16,10 +15,6 @@ import {
 import SemanticUiField from '../../../SemanticReduxFormField';
 
 const FORM_NAME = 'register';
-
-const mapStateToProps = state => ({
-  formState: state.form[FORM_NAME],
-});
 
 const registerForm = {
   form: FORM_NAME,
@@ -47,13 +42,9 @@ const registerForm = {
   }
 };
 
-@connect(mapStateToProps)
 @reduxForm(registerForm)
 export default class RegisterForm extends Component {
   static propTypes = {
-    //mapStateToProps
-    formState: PropTypes.object,
-
     // redux-form
     handleSubmit: PropTypes.func,
     submitting: PropTypes.bool,
@@ -131,7 +122,7 @@ export default class RegisterForm extends Component {
           color="blue"
           disabled={this.props.submitting}
         >
-          Submit
+          Register
         </Button>
       </Form>
     );
