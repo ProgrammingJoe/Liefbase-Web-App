@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { hideModal } from '../../redux/ui/modal';
-import { createMap, updateMap } from '../../redux/entities/reliefMaps';
+import {
+  create as createMap,
+  update as updateMap,
+} from '../../redux/entities/reliefMaps';
 
 import SignInModal from './SignInModal';
 import RegisterModal from './RegisterModal';

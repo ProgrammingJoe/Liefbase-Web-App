@@ -5,10 +5,6 @@ import { map } from 'ramda';
 import { Button } from 'semantic-ui-react';
 
 import { round } from '../../../util/Numbers';
-import {
-  setPosition as setMapPosition,
-  deleteEntity,
-} from '../../../redux/entities/reliefMaps';
 
 import DrawerWrapper from '../DrawerWrapper';
 

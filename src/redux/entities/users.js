@@ -3,7 +3,7 @@ import api from '../../api';
 import { signIn } from '../authorization';
 
 const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
-const LIST_USERS_SUCCESS = 'LIST_USERS_SUCCESS';
+const LIST_USER_SUCCESS = 'LIST_USER_SUCCESS';
 const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
 const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
 const DESTROY_USER_SUCCESS = 'DESTROY_USER_SUCCESS';
@@ -92,7 +92,7 @@ export default function reducer(state = initialState, action) {
     const {[action.payload.id]: _, ...newState } = state;
     return newState;
 
-  case LIST_USERS_SUCCESS:
+  case LIST_USER_SUCCESS:
     const users = {};
     action.payload.forEach((user) => users[user.id] = user);
     return {

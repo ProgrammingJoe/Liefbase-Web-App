@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Form, Dropdown, Button } from 'semantic-ui-react';
 
 import { hideModal } from '../../../../redux/ui/modal';
-import { getTemplates, createEntity } from '../../../../redux/entities/reliefMaps';
 
 const styles = {
   container: {

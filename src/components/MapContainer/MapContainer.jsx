@@ -6,15 +6,6 @@ import L from 'leaflet';
 import { Map, TileLayer, ZoomControl, AttributionControl } from 'react-leaflet';
 import R from 'ramda';
 
-import {
-  getMaps,
-  getTemplates,
-  modifyEntity,
-  createEntity,
-  deleteEntity,
-  deselectAllEntities,
-  selectEntity,
-  clearBounds } from '../../redux/entities/reliefMaps';
 import { showInfo as showInfoDrawer } from '../../redux/ui/drawer';
 
 import {
@@ -37,16 +28,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getMaps: () => dispatch(getMaps()),
-  getMapTemplates: (mapId) => dispatch(getTemplates(mapId)),
-  updateEntity: (entity) => dispatch(modifyEntity(entity)),
-  createEntity: (payload) => dispatch(createEntity(payload)),
-  deleteEntity: (entity) => dispatch(deleteEntity(entity)),
-  deselectAllEntities: () => dispatch(deselectAllEntities()),
-  selectEntity: (id, type) => dispatch(selectEntity(id, type)),
   showInfoDrawer: () => dispatch(showInfoDrawer()),
   showUpdateEntityModal: (entity) => dispatch(showUpdateEntityModal(entity)),
-  clearBounds: () => dispatch(clearBounds()),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -57,24 +40,14 @@ export default class MapContainer extends Component {
     maps: PropTypes.object,
     selectedMapId: PropTypes.number,
     tileMap: PropTypes.object,
-    getMaps: PropTypes.func,
-    updateEntity: PropTypes.func,
-    createEntity: PropTypes.func,
-    deleteEntity: PropTypes.func,
-    deselectAllEntities: PropTypes.func,
-    selectEntity: PropTypes.func,
+
     showInfoDrawer: PropTypes.func,
     showUpdateEntityModal: PropTypes.func,
     entityFilter: PropTypes.array,
-    clearBounds: PropTypes.func,
   };
 
   onMapClick() {
     this.props.deselectAllEntities();
-  }
-
-  componentWillMount() {
-    this.props.getMaps();
   }
 
   componentDidUpdate(prevProps) {

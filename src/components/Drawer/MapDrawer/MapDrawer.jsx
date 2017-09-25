@@ -3,13 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
-import {
-  setTileMap,
-  setEntityFilter,
-  unsetEntityFilter,
-  clearEntityFilters,
-  setAllEntityFilters,
-} from '../../../redux/entities/reliefMaps';
 import DrawerWrapper from '../DrawerWrapper';
 import EntityTemplateFilter from './EntityTemplateFilter';
 import R from 'ramda';
