@@ -84,7 +84,7 @@ export default class SignInForm extends Component {
           color="blue"
           disabled={this.props.submitting}
         >
-          Sign In
+          Log In
         </Button>
       </Form>
     );

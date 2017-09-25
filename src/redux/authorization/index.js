@@ -23,11 +23,9 @@ export const signOut = () => dispatch => {
 export const signIn = (values) => {
   return async dispatch => {
     const response = await api.authorization.signIn(values);
-
     localStorage.setItem('token', response.data.token);
 
     const userResponse = await api.users.getCurrent();
-
     dispatch(signInSuccess(userResponse.data));
     dispatch(getUserSuccess(userResponse.data));
   };
@@ -39,11 +37,16 @@ export const verify = (values) => {
   return async () => await api.authorization.verify(values);
 };
 
-export const refresh = (values) => {
+export const refresh = () => {
   return async dispatch => {
     try {
+      const values = { token: localStorage.getItem('token') };
       const response = await api.authorization.refresh(values);
       localStorage.setItem('token', response.data.token);
+
+      const userResponse = await api.users.getCurrent();
+      dispatch(signInSuccess(userResponse.data));
+      dispatch(getUserSuccess(userResponse.data));
     } catch (err) {
       dispatch(signOut());
     }

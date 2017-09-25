@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './MapContainer.css';
-import '../../../node_modules/leaflet-draw/dist/leaflet.draw.css';
 import L from 'leaflet';
 import { Map, TileLayer, ZoomControl, AttributionControl } from 'react-leaflet';
 import R from 'ramda';
@@ -168,7 +167,7 @@ export default class MapContainer extends Component {
 
   renderPlaceHolder = () =>
     <div className={css.placeHolderContainer}>
-      <p>TODO: make a nice "no map selected" placeholder</p>
+      <p>No map selected</p>
     </div>
 
   render() {

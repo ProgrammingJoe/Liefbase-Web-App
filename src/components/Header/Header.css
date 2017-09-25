@@ -1,14 +1,30 @@
-.Header {
-    background-color: #FFF;
+.header {
+    background-color: #fff;
+    box-shadow: 2px 2px 2px #aaa;
+
     height: 3rem;
     width: 100%;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
+    padding-right: 5px;
+    z-index: 8000;
 }
 
-.ui.floating.dropdown>.menu {
-    margin-top: 0.8em;
-    margin-left: -8em;
+.drawerSelectors {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.email {
+  margin: 0px;
+  padding-right: 10px;
 }

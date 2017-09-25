@@ -122,7 +122,7 @@ export default class RegisterForm extends Component {
           color="blue"
           disabled={this.props.submitting}
         >
-          Register
+          Sign Up
         </Button>
       </Form>
     );

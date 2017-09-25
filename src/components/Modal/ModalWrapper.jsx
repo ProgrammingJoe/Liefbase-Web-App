@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './ModalWrapper.css';
+import css from './ModalWrapper.css';
 
 const styles = {
   title: {
@@ -15,8 +15,8 @@ const ModalWrapper = props => {
 
   return (
     <div>
-      <div className="modal-background" onClick={onClickBackground}> </div>
-        <div className="modal" style={props.style}>
+      <div className={css.modalBackground} onClick={onClickBackground}> </div>
+        <div className={css.modal} style={props.style}>
           { props.title && <h3 style={styles.title}>{ props.title }</h3> }
           {props.children}
         </div>

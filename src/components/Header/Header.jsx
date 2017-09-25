@@ -12,7 +12,7 @@ import {
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import HeaderButton from './HeaderButton';
 
-import './Header.css';
+import css from './Header.css';
 
 const text = {
   liefbase: 'liefbase',
@@ -22,34 +22,9 @@ const text = {
   createMap: 'Create Map',
 };
 
-const styles = {
-  container: {
-    backgroundColor: '#FFF',
-    height: '3rem',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '5px',
-    zIndex: '8000',
-  },
-  leftGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-  },
-  rightGroup: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  email: {
-    margin: '0px',
-    paddingRight: '10px',
-  }
-};
-
 const mapStateToProps = (state) => {
-  const id = state.ui.userId;
+  const id = state.authorization.currentUserId;
+
   return {
     user: state.entities.users[id],
     modal: state.ui.modal,
@@ -57,33 +32,39 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onClickSignIn: () => dispatch(showSignIn()),
-    onClickRegister: () => dispatch(showRegister()),
-    onClickCreateMap: () => dispatch(showCreateMap()),
-    onClickSignOut: () => dispatch(signOut()),
-    openMapSettingsDrawer: () => dispatch(showMap()),
-    openSearchDrawer: () => dispatch(showSearch()),
-    openInfoDrawer: () => dispatch(showInfo()),
-    hideDrawer: () => dispatch(hideDrawer()),
-    refreshSession: () => dispatch(refreshSession()),
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  onClickSignIn: () => dispatch(showSignIn()),
+  onClickRegister: () => dispatch(showRegister()),
+  onClickCreateMap: () => dispatch(showCreateMap()),
+  onClickSignOut: () => dispatch(signOut()),
+  openMapSettingsDrawer: () => dispatch(showMap()),
+  openSearchDrawer: () => dispatch(showSearch()),
+  openInfoDrawer: () => dispatch(showInfo()),
+  hideDrawer: () => dispatch(hideDrawer()),
+  refreshSession: () => dispatch(refreshSession()),
+});
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Header extends Component {
   static propTypes = {
-    user: PropTypes.shape({email: PropTypes.string}),
-    drawer: PropTypes.string,
-    hideDrawer: PropTypes.func,
+    user: PropTypes.shape({
+      firstName: PropTypes.string,
+      email: PropTypes.string,
+    }),
+
+    // Buttons
     onClickSignIn: PropTypes.func,
     onClickRegister: PropTypes.func,
     onClickSignOut: PropTypes.func,
     onClickCreateMap: PropTypes.func,
+
+    // Drawers
+    drawer: PropTypes.string,
+    hideDrawer: PropTypes.func,
     openInfoDrawer: PropTypes.func,
     openMapSettingsDrawer: PropTypes.func,
     openSearchDrawer: PropTypes.func,
+
     refreshSession: PropTypes.func,
   };
 
@@ -92,8 +73,8 @@ export default class Header extends Component {
   }
 
   renderLoggedIn = () =>
-    <div style={styles.rightGroup}>
-      <h4 style={styles.email}>{ 'Welcome TODO WELCOME MESSAGE' }</h4>
+    <div className={css.buttons}>
+      <h4 className={css.email}>{ `Welcome ${this.props.user.firstName}!`}</h4>
       <Button
         onClick={() => this.props.onClickCreateMap()}
         color="blue"
@@ -118,8 +99,8 @@ export default class Header extends Component {
     </div>
 
   render = () =>
-    <div style={styles.container}>
-      <div style={styles.leftGroup}>
+    <div className={css.header}>
+      <div className={css.drawerSelectors}>
         <HeaderButton
           icon="search"
           onClick={() => this.props.drawer === 'SEARCH' ? this.props.hideDrawer() : this.props.openSearchDrawer()}
@@ -134,8 +115,6 @@ export default class Header extends Component {
         />
         <h1 style={{margin: '15px'}}>{ text.liefbase }</h1>
       </div>
-      { false ? this.renderLoggedIn() : this.renderLoggedOut() }
+      { this.props.user ? this.renderLoggedIn() : this.renderLoggedOut() }
     </div>
-
-    // todo remove false above
 }

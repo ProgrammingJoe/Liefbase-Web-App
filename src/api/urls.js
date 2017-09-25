@@ -2,8 +2,8 @@ const getAuthHeader = () => ({ 'Authorization': `jwt ${localStorage.getItem('tok
 export const performWithAuth = (method, ...args) => method(...args, { headers: getAuthHeader() });
 
 const signIn = '/api/token-auth/';
-const refreshJwt = '/api/token-refresh/';
-const verifyJwt = '/api/token-verify/';
+const refresh = '/api/token-refresh/';
+const verify = '/api/token-verify/';
 
 const filterPresets = '/api/filterpresets/';
 const filterPreset = id => `${filterPresets}${id}/`;
@@ -36,8 +36,8 @@ const currentUser = `${users}me/`;
 
 export default {
   signIn,
-  refreshJwt,
-  verifyJwt,
+  refresh,
+  verify,
   filterPresets,
   filterPreset,
   mapItems,

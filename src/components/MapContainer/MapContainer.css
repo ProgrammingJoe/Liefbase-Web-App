@@ -6,15 +6,15 @@
 }
 
 .placeHolderContainer {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  width: 100%;
+  font-size: 20px;
 }
 
 .map {
     height: 100%;
     width: 100%;
-}
-
-/* react-leaflet-draw style override */
-.sr-only {
-    display: none;
 }
