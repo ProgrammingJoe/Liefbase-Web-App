@@ -54,7 +54,7 @@ export const refresh = () => {
 };
 
 const initialState = {
-  currentUserId: undefined,
+  currentUserId: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -68,7 +68,7 @@ export default function reducer(state = initialState, action) {
   case SIGN_OUT_SUCCESS:
     return {
       ...state,
-      currentUserId: undefined,
+      currentUserId: null,
     };
   }
 

@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { Input, Menu, Icon } from 'semantic-ui-react';
 
 import {
-  list as listMaps
+  list as listMaps,
+  destroy as destroyMap,
 } from '../../../redux/entities/reliefMaps';
-import { showEditMapDetails } from '../../../redux/ui/modal';
+import { showUpdateMap } from '../../../redux/ui/modal';
 import { setSearchText } from '../../../redux/ui/drawer';
 import { selectMap } from '../../../redux/ui/map';
 
@@ -36,11 +37,8 @@ const mapDispatchToProps = (dispatch) => ({
   listMaps: () => dispatch(listMaps()),
   selectMap: (map) => dispatch(selectMap(map)),
   setSearchText: (text) => dispatch(setSearchText(text)),
-  deleteMap: (id) => dispatch(deleteMap(id)),
-  editMapDetails: (id) => {
-    dispatch(selectMap(id));
-    dispatch(showEditMapDetails());
-  },
+  destroyMap: (map) => dispatch(destroyMap(map)),
+  updateMap: (map) => dispatch(showUpdateMap(map)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -55,19 +53,26 @@ export default class SearchDrawer extends Component {
     listMaps: PropTypes.func,
     selectMap: PropTypes.func,
     setSearchText: PropTypes.func,
-    deleteMap: PropTypes.func,
-    editMapDetails: PropTypes.func,
+    destroyMap: PropTypes.func,
+    updateMap: PropTypes.func,
   };
 
-  componentWillMount = () => {
-    console.log('mounting');
-    this.props.listMaps();
-  }
-
+  componentWillMount = () => this.props.listMaps()
 
   render() {
     const maps = Object.values(this.props.maps)
-      .sort((m1, m2) => m1.name < m2.name);
+      .sort((m1, m2) => {
+        // case insensitive.
+        if (m1.name.toLowerCase() > m2.name.toLowerCase()) return 1;
+        if (m1.name.toLowerCase() < m2.name.toLowerCase()) return -1;
+
+        // upper case first if same name.
+        if (m1.name > m2.name) return 1;
+        if (m1.name < m2.name) return -1;
+
+        // deterministic
+        return m1.id > m2.id;
+      });
 
     return (
       <DrawerWrapper { ...this.props }>
@@ -79,29 +84,40 @@ export default class SearchDrawer extends Component {
             value={ this.props.searchText }
           />
 
-          <Menu vertical style={ styles.menu }>
+          <Menu vertical style={styles.menu}>
           {
             maps.filter((map) => map.name.toLowerCase().includes(
               this.props.searchText.toLowerCase())
             ).map((map) =>
-              <div key={ map.id }>
+              <div key={map.id}>
                 <Menu.Item
-                  name={ map.name }
-                  onClick={ () => this.props.selectMap(map) }
+                  name={map.name}
+                  onClick={() => this.props.selectMap(map)}
                   active={ map.id === this.props.selectedMapId }
-                  style={{ textAlign: 'left' }}
+                  style={{ display: 'flex', wordBreak: 'break-all' }}
                 >
                   {map.name}
-                  <Icon
-                    name='delete'
-                    color='red'
-                    onClick={ () => this.props.deleteMap(map.id) }
-                  />
-                  <Icon
-                    name='edit'
-                    color='blue'
-                    onClick={ () => this.props.editMapDetails(map.id) }
-                  />
+                  {
+                    !map.public && // todo: check if current user is admin of map for these buttons
+                      <div style={{ marginLeft: 'auto' }}>
+                        <Icon
+                          name='edit'
+                          color='blue'
+                          onClick={e => {
+                            e.stopPropagation();
+                            this.props.updateMap(map);
+                          }}
+                        />
+                        <Icon
+                          name='delete'
+                          color='red'
+                          onClick={e => {
+                            e.stopPropagation();
+                            this.props.destroyMap(map);
+                          }}
+                        />
+                      </div>
+                  }
                 </Menu.Item>
               </div>
             )

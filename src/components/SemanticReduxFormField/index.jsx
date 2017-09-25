@@ -17,11 +17,10 @@ export default class SemanticReduxFormField extends React.Component {
   render() {
     const {
       input,
-      as: As = Input
+      meta: { touched, error},
+      as: As = Input,
+      ...passThrough
     } = this.props;
-
-    const { meta, ...passThrough } = this.props;
-    const { touched, error } = meta;
 
     const isError = Boolean(error);
 

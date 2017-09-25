@@ -6,7 +6,7 @@ export const selectMap = (payload) => ({
 });
 
 const initialState = {
-  selectedMapId: undefined,
+  selectedMapId: null,
 };
 
 export default function reducer(state = initialState, action) {

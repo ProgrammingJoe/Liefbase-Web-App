@@ -3,7 +3,7 @@ const SHOW_SIGN_IN_MODAL = 'SHOW_SIGN_IN_MODAL';
 const SHOW_REGISTER_MODAL = 'SHOW_REGISTER_MODAL';
 const SHOW_CREATE_MAP_MODAL = 'SHOW_CREATE_MAP_MODAL';
 const SHOW_UPDATE_ENTITY_MODAL = 'SHOW_UPDATE_ENTITY_MODAL';
-const SHOW_EDIT_MAP_DETAILS_MODAL = 'SHOW_EDIT_MAP_DETAILS_MODAL';
+const SHOW_UPDATE_MAP_MODAL = 'SHOW_UPDATE_MAP_MODAL';
 
 export function showRegister() {
   return {
@@ -29,9 +29,10 @@ export function showCreateMap() {
   };
 }
 
-export function showEditMapDetails() {
+export function showUpdateMap(payload) {
   return {
-    type: SHOW_EDIT_MAP_DETAILS_MODAL
+    type: SHOW_UPDATE_MAP_MODAL,
+    payload,
   };
 }
 
@@ -45,37 +46,31 @@ export function showUpdateEntity(entity) {
 const initialState = {
   modalType: null,
   entity: null,
+  updateMapId: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch(action.type){
   case SHOW_SIGN_IN_MODAL:
-    return Object.assign(
-      {},
-      state,
-      { modalType: 'SIGN_IN' },
-    );
+    return {
+      ...state,
+      modalType: 'SIGN_IN',
+    };
 
   case SHOW_REGISTER_MODAL:
-    return Object.assign(
-      {},
-      state,
-      { modalType: 'REGISTER'  },
-    );
+    return {
+      ...state,
+      modalType: 'REGISTER',
+    };
 
   case HIDE_MODAL:
-    return Object.assign(
-      {},
-      state,
-      { modalType: null, entity: null },
-    );
+    return initialState;
 
   case SHOW_CREATE_MAP_MODAL:
-    return Object.assign(
-      {},
-      state,
-      { modalType: 'CREATE_MAP' },
-    );
+    return {
+      ...state,
+      modalType: 'CREATE_MAP',
+    };
 
   case SHOW_UPDATE_ENTITY_MODAL:
     return {
@@ -84,13 +79,13 @@ export default function reducer(state = initialState, action) {
       entity: action.entity,
     };
 
-  case SHOW_EDIT_MAP_DETAILS_MODAL:
+  case SHOW_UPDATE_MAP_MODAL:
     return {
       ...state,
-      modalType: 'EDIT_MAP_DETAILS',
+      modalType: 'UPDATE_MAP',
+      updateMapId: action.payload.id,
     };
-
-  default:
-    return state;
   }
+
+  return state;
 }

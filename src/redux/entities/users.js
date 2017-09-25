@@ -87,9 +87,8 @@ export default function reducer(state = initialState, action) {
     };
 
   case DESTROY_USER_SUCCESS:
-    // pull the deleted user out of state.
-    // eslint-disable-next-line no-unused-vars
-    const {[action.payload.id]: _, ...newState } = state;
+    const { ...newState } = state;
+    delete newState[action.payload.id];
     return newState;
 
   case LIST_USER_SUCCESS:
