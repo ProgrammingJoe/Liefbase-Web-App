@@ -77,6 +77,7 @@ export default class SearchDrawer extends Component {
     return (
       <DrawerWrapper { ...this.props }>
         <div style={ styles.container }>
+          {/* todo: better mechanism for search (semantic autocomplete element?)*/}
           <Input
             placeholder="Search..."
             icon="search"
