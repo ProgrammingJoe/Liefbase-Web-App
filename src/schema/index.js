@@ -33,7 +33,9 @@ filterPreset.define({});
 mapItem.define({});
 
 mapItemTemplate.define({
-  mapItems: [mapItem]
+  mapItems: {
+    features: [mapItem],
+  },
 });
 
 membership.define({});

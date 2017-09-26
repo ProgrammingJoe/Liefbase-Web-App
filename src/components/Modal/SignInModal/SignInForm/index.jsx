@@ -46,7 +46,6 @@ export default class SignInForm extends Component {
       await dispatch(signIn(values));
       dispatch(hideModal());
     } catch (err) {
-      console.log(err);
       const errors = {};
 
       if (err.response) {

@@ -45,10 +45,8 @@ export const refresh = () => {
       localStorage.setItem('token', response.data.token);
 
       const userResponse = await api.user.getCurrent();
-      const normalized = normalize(userResponse.data, schemas.user);
-
       dispatch(signInSuccess(userResponse.data));
-      dispatch(entitySuccess('user')(normalized));
+      dispatch(entitySuccess('user')(userResponse.data));
     } catch (err) {
       dispatch(signOut());
     }
