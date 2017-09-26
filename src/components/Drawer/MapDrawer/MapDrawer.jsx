@@ -70,7 +70,7 @@ MapDrawer.propTypes = {
 
 const mapStateToProps = state => {
   const id = state.ui.reliefMapId;
-  const selectedMap = state.entities.reliefMaps[id];
+  const selectedMap = state.entities.reliefMap[id];
 
   return {
     tileMaps: state.ui.tileMaps,

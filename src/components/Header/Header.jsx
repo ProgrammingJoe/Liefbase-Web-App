@@ -22,11 +22,12 @@ const text = {
   createMap: 'Create Map',
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+  console.log(state);
   const id = state.authorization.currentUserId;
 
   return {
-    user: state.entities.users[id],
+    user: state.entities.user[id],
     modal: state.ui.modal,
     drawer: state.ui.drawer.drawerType,
   };

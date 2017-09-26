@@ -18,7 +18,7 @@ import css from './MapContainer.css';
 
 const mapStateToProps = (state) => {
   return {
-    maps: state.entities.reliefMaps,
+    maps: state.entities.reliefMap,
     selectedMapId: state.ui.reliefMapId,
     tileMap: state.ui.tileMap,
     position: state.ui.position,

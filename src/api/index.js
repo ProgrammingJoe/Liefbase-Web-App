@@ -1,11 +1,11 @@
-import users from './users';
+import user from './user';
 import authorization from './authorization';
-import reliefMaps from './reliefMaps';
+import reliefMap from './reliefMap';
 
 export default {
   authorization,
-  reliefMaps,
-  users,
+  reliefMap,
+  user,
 };
 
 export const getMapTemplates = () => console.log('todo get rid of me');

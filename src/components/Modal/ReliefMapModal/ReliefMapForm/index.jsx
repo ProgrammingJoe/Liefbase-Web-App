@@ -4,10 +4,8 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import { hideModal } from '../../../../redux/ui/modal';
-import {
-  create as createMap,
-  update as updateMap,
-} from '../../../../redux/entities/reliefMaps';
+import { behaviours } from '../../../../redux/entities/actionCreators';
+import { selectMap } from '../../../../redux/ui/map';
 
 import {
   Button,
@@ -33,7 +31,7 @@ const reliefMapForm = {
 
 const mapStateToProps = state => {
   const id = state.ui.modal.updateMapId;
-  const map = state.entities.reliefMaps[id] || {};
+  const map = state.entities.reliefMap[id] || {};
   const { name, description } = map;
 
   return {
@@ -64,10 +62,15 @@ export default class ReliefMapForm extends Component {
       ...values,
       id,
     };
-    const action = id ? updateMap : createMap;
+    const action = id ? behaviours.reliefMap.update : behaviours.reliefMap.create;
 
     try {
-      await dispatch(action(newValues));
+      const reliefMap = await dispatch(action(newValues));
+
+      // select a freshly created map
+      if (!id) {
+        dispatch(selectMap(reliefMap))
+      }
       dispatch(hideModal());
     } catch (err) {
       const errors = {};
