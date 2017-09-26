@@ -37,9 +37,9 @@ const DrawerWrapper = props => {
     <div style={ styles.container }>
       <div>
         <div style={ styles.title }>{ getDrawerTitle(props.type) }</div>
-        <Icon 
-          name="close" 
-          size="big" 
+        <Icon
+          name="close"
+          size="big"
           style={ styles.closeButton }
           onClick={ props.hideDrawer }
         />
@@ -48,8 +48,6 @@ const DrawerWrapper = props => {
     </div>
   );
 };
-
-
 
 DrawerWrapper.propTypes = {
   type: PropTypes.string,

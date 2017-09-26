@@ -10,12 +10,7 @@ const styles = {
   }
 };
 
-const RegisterModal = props => {
-  return (
-    <ModalWrapper style={styles.modal} {...props}>
-      <RegisterForm />
-    </ModalWrapper>
-  );
-};
-
-export default RegisterModal;
+export default props =>
+  <ModalWrapper style={styles.modal} {...props}>
+    <RegisterForm />
+  </ModalWrapper>;

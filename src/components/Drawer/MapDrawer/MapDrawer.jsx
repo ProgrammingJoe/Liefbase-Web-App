@@ -16,7 +16,41 @@ const styles = {
   },
 };
 
-class MapDrawer extends Component {
+const mapStateToProps = state => {
+  const id = state.ui.reliefMapId;
+  const selectedMap = state.entities.reliefMap[id];
+
+  return {
+    tileMaps: state.ui.tileMaps,
+    selectedTileMap: state.ui.selectedTileMap,
+    selectedMap,
+    entityFilter: state.ui.entityFilter,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  setTileMap: (index) => dispatch(setTileMap(index)),
+  setEntityFilter: (kind, id) => dispatch(setEntityFilter(kind, id)),
+  unsetEntityFilter: (kind, id) => dispatch(unsetEntityFilter(kind, id)),
+  clearEntityFilters: () => dispatch(clearEntityFilters()),
+  setAllEntityFilters: () => dispatch(setAllEntityFilters()),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class MapDrawer extends Component {
+  static propTypes = {
+    setTileMap: PropTypes.func,
+    resourceTemplates: PropTypes.object,
+    hazardTemplates: PropTypes.object,
+    tileMaps: PropTypes.array,
+    selectedTileMap: PropTypes.number,
+    entityFilter: PropTypes.array,
+    setEntityFilter: PropTypes.func,
+    unsetEntityFilter: PropTypes.func,
+    setAllEntityFilters: PropTypes.func,
+    clearEntityFilters: PropTypes.func,
+  };
+
   onChangeFilter = (kind, id) => {
     if(!R.contains({kind, id}, this.props.entityFilter)) {
       this.props.setEntityFilter(kind, id);
@@ -54,38 +88,3 @@ class MapDrawer extends Component {
     );
   }
 }
-
-MapDrawer.propTypes = {
-  setTileMap: PropTypes.func,
-  resourceTemplates: PropTypes.object,
-  hazardTemplates: PropTypes.object,
-  tileMaps: PropTypes.array,
-  selectedTileMap: PropTypes.number,
-  entityFilter: PropTypes.array,
-  setEntityFilter: PropTypes.func,
-  unsetEntityFilter: PropTypes.func,
-  setAllEntityFilters: PropTypes.func,
-  clearEntityFilters: PropTypes.func,
-};
-
-const mapStateToProps = state => {
-  const id = state.ui.reliefMapId;
-  const selectedMap = state.entities.reliefMap[id];
-
-  return {
-    tileMaps: state.ui.tileMaps,
-    selectedTileMap: state.ui.selectedTileMap,
-    selectedMap,
-    entityFilter: state.ui.entityFilter,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  setTileMap: (index) => dispatch(setTileMap(index)),
-  setEntityFilter: (kind, id) => dispatch(setEntityFilter(kind, id)),
-  unsetEntityFilter: (kind, id) => dispatch(unsetEntityFilter(kind, id)),
-  clearEntityFilters: () => dispatch(clearEntityFilters()),
-  setAllEntityFilters: () => dispatch(setAllEntityFilters()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MapDrawer);

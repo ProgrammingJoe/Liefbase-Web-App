@@ -1,90 +1,72 @@
+import { normalize } from 'normalizr';
+
 import api from '../../../api';
-import { entities } from '../../../schema';
+import schemas, { entities } from '../../../schema';
 
-// default actions and behaviours for basic api tasks.
-const actions = {};
-const behaviours = {};
-
-const getSuccess = entityName => payload => ({
-  entityName,
-  type: 'get',
-  payload,
-});
-
-const get = entityName => id => async dispatch => {
-  const response = await api[entityName].get(id);
-  dispatch(actions[entityName].getSuccess(response.data));
-  return response.data;
+export const entitySuccess = entityName => data => {
+  const normalized = normalize(data, schemas[entityName]);
+  const entities = normalized.entities;
+  return {
+    type: 'ENTITY_SUCCESS',
+    entities,
+  };
 };
 
-const listSuccess = entityName => payload => ({
+const listEntitiesSuccess = entityName => data => {
+  const normalized = normalize(data, [schemas[entityName]]);
+  const entities = normalized.entities;
+  return {
+    type: 'LIST_ENTITIES_SUCCESS',
+    entities,
+  };
+};
+
+const destroySuccess = entityName => data => ({
+  type: 'DESTROY',
   entityName,
-  type: 'list',
-  payload,
+  id: data.id,
 });
+
+const get = entityName => values => async dispatch => {
+  const response = await api[entityName].get(values);
+  dispatch(entitySuccess(entityName)(response.data));
+  return response.data;
+};
 
 const list = entityName => () => async dispatch => {
   const response = await api[entityName].list();
-  dispatch(actions[entityName].listSuccess(response.data));
+  dispatch(listEntitiesSuccess(entityName)(response.data));
   return response.data;
 };
-
-const createSuccess = entityName => payload => ({
-  entityName,
-  type: 'create',
-  payload,
-});
 
 const create = entityName => values => async dispatch => {
   const response = await api[entityName].create(values);
-  dispatch(actions[entityName].createSuccess(response.data));
+  dispatch(entitySuccess(entityName)(response.data));
   return response.data;
 };
-
-const updateSuccess = entityName => payload => ({
-  entityName,
-  type: 'update',
-  payload,
-});
 
 const update = entityName => values => async dispatch => {
   const response = await api[entityName].update(values);
-  dispatch(actions[entityName].updateSuccess(response.data));
+  dispatch(entitySuccess(entityName)(response.data));
   return response.data;
 };
 
-const destroySuccess = entityName => payload => ({
-  entityName,
-  type: 'destroy',
-  payload,
-});
-
 const destroy = entityName => values => async dispatch => {
-  const response = await api[entityName].destroy(values);
-  dispatch(actions[entityName].destroySuccess(values));
+  await api[entityName].destroy(values);
+  dispatch(destroySuccess(values));
   return true;
 };
 
-
+// default behaviours for basic api tasks.
+const entityCrud = {};
 entities.forEach(e => {
-  actions[e] = {
-    getSuccess: getSuccess(e),
-    listSuccess: listSuccess(e),
-    createSuccess: createSuccess(e),
-    updateSuccess: updateSuccess(e),
-    destroySuccess: destroySuccess(e),
-  };
-
-  behaviours[e] = {
+  entityCrud[e] = {
     get: get(e),
     list: list(e),
     create: create(e),
     update: update(e),
     destroy: destroy(e),
-  }
+  };
 });
 
-export {
-  actions,
-  behaviours,
-}
+export default entityCrud;

@@ -1,6 +1,6 @@
 import api from '../../api';
-
-import { actions } from '../entities/actionCreators';
+import schemas from '../../schema';
+import { entitySuccess } from '../entities/actionCreators';
 
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
@@ -27,7 +27,7 @@ export const signIn = (values) => {
 
     const userResponse = await api.user.getCurrent();
     dispatch(signInSuccess(userResponse.data));
-    dispatch(actions.user.getSuccess(userResponse.data));
+    dispatch(entitySuccess('user')(userResponse.data));
   };
 };
 
@@ -45,8 +45,10 @@ export const refresh = () => {
       localStorage.setItem('token', response.data.token);
 
       const userResponse = await api.user.getCurrent();
+      const normalized = normalize(userResponse.data, schemas.user);
+
       dispatch(signInSuccess(userResponse.data));
-      dispatch(actions.user.getSuccess(userResponse.data));
+      dispatch(entitySuccess('user')(normalized));
     } catch (err) {
       dispatch(signOut());
     }

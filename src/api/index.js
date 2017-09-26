@@ -1,20 +1,20 @@
-import user from './user';
+import request from 'axios';
+
+import { entities } from '../schema';
+import urls, { performWithAuth } from './urls' ;
 import authorization from './authorization';
-import reliefMap from './reliefMap';
 
-export default {
-  authorization,
-  reliefMap,
-  user,
-};
+const apiMethods = { authorization };
 
-export const getMapTemplates = () => console.log('todo get rid of me');
+entities.forEach(e => apiMethods[e] = {
+  get: (values) => performWithAuth(request.get, urls[e](values.id)),
+  list: () => performWithAuth(request.get, urls[`${e}s`]),
+  create: (values) => performWithAuth(request.post, urls[`${e}s`], values),
+  update: (values) => performWithAuth(request.patch, urls[e](values.id), values),
+  destroy: (values) => performWithAuth(request.delete, urls[e](values.id)),
+});
 
-export const createResourceAPI = () => console.log('todo get rid of me');
-export const createHazardAPI = () => console.log('todo get rid of me');
-export const modifyResourceAPI = () => console.log('todo get rid of me');
-export const modifyHazardAPI = () => console.log('todo get rid of me');
-export const deleteResourceAPI = () => console.log('todo get rid of me');
-export const deleteHazardAPI = () => console.log('todo get rid of me');
+// TODO: eventually split custom methods out into files
+apiMethods.user.getCurrent = () => performWithAuth(request.get, urls.currentUser);
 
-export const getOrganizations = () => console.log('todo get rid of me');
+export default apiMethods;

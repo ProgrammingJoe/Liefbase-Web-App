@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Input, Menu, Icon } from 'semantic-ui-react';
 
-import { behaviours } from '../../../redux/entities/actionCreators';
+import actions from '../../../redux/entities/actionCreators';
 import { showUpdateMap } from '../../../redux/ui/modal';
 import { setSearchText } from '../../../redux/ui/drawer';
 import { selectMap } from '../../../redux/ui/map';
@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  listMaps: () => dispatch(behaviours.reliefMap.list()),
+  listMaps: () => dispatch(actions.reliefMap.list()),
   selectMap: (map) => dispatch(selectMap(map)),
   setSearchText: (text) => dispatch(setSearchText(text)),
   destroyMap: (map) => dispatch(destroyMap(map)),

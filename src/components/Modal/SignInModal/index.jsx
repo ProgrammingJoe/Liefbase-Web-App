@@ -10,12 +10,7 @@ const styles = {
   }
 };
 
-const SignInModal = props => {
-  return (
-    <ModalWrapper style={styles.modal} {...props}>
-      <SignInForm />
-    </ModalWrapper>
-  );
-};
-
-export default SignInModal;
+export default props =>
+  <ModalWrapper style={styles.modal} {...props}>
+    <SignInForm />
+  </ModalWrapper>;

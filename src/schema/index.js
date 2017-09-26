@@ -13,7 +13,7 @@ export const entities = [
 ];
 
 
-const schemas = {}
+const schemas = {};
 entities.forEach(e => schemas[e] = new schema.Entity(e));
 
 const {

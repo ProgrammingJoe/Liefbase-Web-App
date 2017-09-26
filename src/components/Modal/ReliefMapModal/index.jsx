@@ -10,13 +10,7 @@ const styles = {
   }
 };
 
-const ReliefMapModal = props => {
-  return (
-    <ModalWrapper style={styles.modal} {...props}>
-      <ReliefMapForm {...props} />
-    </ModalWrapper>
-  );
-};
-
-
-export default ReliefMapModal;
+export default props =>
+  <ModalWrapper style={styles.modal} {...props}>
+    <ReliefMapForm {...props} />
+  </ModalWrapper>;

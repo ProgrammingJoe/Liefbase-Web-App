@@ -10,10 +10,7 @@ const styles = {
   },
 };
 
-const UpdateEntityModal = props => (
+export default props =>
   <ModalWrapper style={styles.modal} {...props}>
     <UpdateEntityForm />
-  </ModalWrapper>
-);
-
-export default UpdateEntityModal;
+  </ModalWrapper>;

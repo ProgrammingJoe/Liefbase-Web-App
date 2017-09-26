@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 
-import { behaviours } from '../../../../redux/entities/actionCreators';
+import actions from '../../../../redux/entities/actionCreators';
 import { signIn } from '../../../../redux/authorization';
 import { hideModal } from '../../../../redux/ui/modal';
 
@@ -54,7 +54,7 @@ export default class RegisterForm extends Component {
 
   handleSubmit = async (values, dispatch) => {
     try {
-      await dispatch(behaviours.user.create(values));
+      await dispatch(actions.user.create(values));
       await dispatch(signIn(values));
       dispatch(hideModal());
     } catch (err) {

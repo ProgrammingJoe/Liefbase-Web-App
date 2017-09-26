@@ -27,12 +27,19 @@ const styles = {
   }
 };
 
-class EntityTemplateFilter extends Component {
+export default class EntityTemplateFilter extends Component {
+  static propTypes = {
+    hazardTemplates: PropTypes.object,
+    resourceTemplates: PropTypes.object,
+    onClearFilters: PropTypes.func,
+    onAllFilters: PropTypes.func,
+    onChange: PropTypes.func,
+    entityFilter: PropTypes.array,
+  };
+
   constructor() {
     super();
-    this.state = {
-      searchText: '',
-    };
+    this.state = { searchText: '' };
   }
 
   render() {
@@ -89,14 +96,3 @@ class EntityTemplateFilter extends Component {
     );
   }
 }
-
-EntityTemplateFilter.propTypes = {
-  hazardTemplates: PropTypes.object,
-  resourceTemplates: PropTypes.object,
-  onClearFilters: PropTypes.func,
-  onAllFilters: PropTypes.func,
-  onChange: PropTypes.func,
-  entityFilter: PropTypes.array,
-};
-
-export default EntityTemplateFilter;

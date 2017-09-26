@@ -16,7 +16,32 @@ const styles = {
   },
 };
 
-class InformationDrawer extends Component {
+const mapStateToProps = state => {
+  const id = state.ui.reliefMapId;
+  const selectedMap = state.entities.reliefMap[id];
+
+  const entities = []; // todo fix this.
+
+  return ({
+    selectedMap,
+    selectedEntities: entities, // todo fix this.
+    templates: selectedMap.map_item_templates,
+});
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  setMapPosition: (lat, lng, zoom) => dispatch(setMapPosition(lat, lng, zoom)),
+  deleteEntity: (entity) => dispatch(deleteEntity(entity)),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class InformationDrawer extends Component {
+  static propTypes = {
+    selectedEntities: PropTypes.array,
+    setMapPosition: PropTypes.func,
+    deleteEntity: PropTypes.func,
+  };
+
   render() {
     return (
       <DrawerWrapper {...this.props}>
@@ -42,29 +67,3 @@ class InformationDrawer extends Component {
     );
   }
 }
-
-InformationDrawer.propTypes = {
-  selectedEntities: PropTypes.array,
-  setMapPosition: PropTypes.func,
-  deleteEntity: PropTypes.func,
-};
-
-const mapStateToProps = state => {
-  const id = state.ui.reliefMapId;
-  const selectedMap = state.entities.reliefMap[id];
-
-  const entities = []; // todo fix this.
-
-  return ({
-    selectedMap,
-    selectedEntities: entities, // todo fix this.
-    templates: selectedMap.map_item_templates,
-});
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  setMapPosition: (lat, lng, zoom) => dispatch(setMapPosition(lat, lng, zoom)),
-  deleteEntity: (entity) => dispatch(deleteEntity(entity)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(InformationDrawer);

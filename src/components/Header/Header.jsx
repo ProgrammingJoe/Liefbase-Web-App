@@ -23,11 +23,11 @@ const text = {
 };
 
 const mapStateToProps = state => {
-  console.log(state);
   const id = state.authorization.currentUserId;
+  const user = state.entities.user[id];
 
   return {
-    user: state.entities.user[id],
+    user,
     modal: state.ui.modal,
     drawer: state.ui.drawer.drawerType,
   };

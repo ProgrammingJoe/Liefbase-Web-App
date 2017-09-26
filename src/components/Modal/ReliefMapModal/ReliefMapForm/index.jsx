@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import { hideModal } from '../../../../redux/ui/modal';
-import { behaviours } from '../../../../redux/entities/actionCreators';
+import actions from '../../../../redux/entities/actionCreators';
 import { selectMap } from '../../../../redux/ui/map';
 
 import {
@@ -62,14 +62,14 @@ export default class ReliefMapForm extends Component {
       ...values,
       id,
     };
-    const action = id ? behaviours.reliefMap.update : behaviours.reliefMap.create;
+    const action = id ? actions.reliefMap.update : actions.reliefMap.create;
 
     try {
-      const reliefMap = await dispatch(action(newValues));
+      const newMap = await dispatch(action(newValues));
 
       // select a freshly created map
       if (!id) {
-        dispatch(selectMap(reliefMap))
+        dispatch(selectMap(newMap));
       }
       dispatch(hideModal());
     } catch (err) {
