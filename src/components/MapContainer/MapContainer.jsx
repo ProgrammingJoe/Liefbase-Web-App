@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { denormalize } from 'normalizr';
 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Map, TileLayer, ZoomControl, AttributionControl } from 'react-leaflet';
+import { Map,
+  TileLayer,
+  ZoomControl,
+  GeoJSON
+} from 'react-leaflet';
 
-import css from './MapContainer.css';
+import schemas from '../../schema';
 
 const mapStateToProps = state => {
   const id = state.ui.map.selectedMapId;
   const map = state.entities.reliefMap[id];
+
+  // todo: put this in reselect eventually..
+  const templates = denormalize(map.mapItemTemplates, [schemas.mapItemTemplate], state.entities);
 
   // todo: do these in redux state
   const tileMap = {
@@ -28,7 +36,7 @@ const mapStateToProps = state => {
   const clearBounds = () => console.log('clearBounds');
 
   return {
-    map,
+    templates,
     tileMap,
     bounds,
     position,
@@ -39,7 +47,8 @@ const mapStateToProps = state => {
 @connect(mapStateToProps)
 export default class MapContainer extends Component {
   static propTypes = {
-    map: PropTypes.object,
+    templates: PropTypes.array,
+
     tileMap: PropTypes.object,
     position: PropTypes.object,
     bounds: PropTypes.array,
@@ -69,7 +78,7 @@ export default class MapContainer extends Component {
   }
 
   render() {
-    const { map, tileMap, position, bounds, clearBounds } = this.props;
+    const { templates, tileMap, position, bounds, clearBounds } = this.props;
 
     return (
       <Map
@@ -86,12 +95,12 @@ export default class MapContainer extends Component {
         maxZoom={tileMap.maxZoom}
         attributionControl={false}
       >
-        <AttributionControl ref={m => this.leafletAttrib = m} />
         <ZoomControl position="bottomright" />
         <TileLayer
           url={tileMap.url}
           attribution={tileMap.attribution}
         />
+        { templates.map(t => <GeoJSON data={t.mapItems} />) }
       </Map>
     );
   }

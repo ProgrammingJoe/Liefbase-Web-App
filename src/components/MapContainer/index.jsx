@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { Map, TileLayer, ZoomControl, AttributionControl } from 'react-leaflet';
-
-import MapContainer from './MapContainer'
+import MapContainer from './MapContainer';
 
 import css from './MapContainer.css';
 
