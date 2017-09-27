@@ -1,5 +1,4 @@
 import api from '../../api';
-import schemas from '../../schema';
 import { entitySuccess } from '../entities/actionCreators';
 
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';

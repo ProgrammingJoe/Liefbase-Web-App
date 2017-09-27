@@ -23,11 +23,15 @@ const text = {
 };
 
 const mapStateToProps = state => {
-  const id = state.authorization.currentUserId;
-  const user = state.entities.user[id];
+  const userId = state.authorization.currentUserId;
+  const currentUser = state.entities.user[userId];
+
+  const mapId = state.ui.map.selectedMapId;
+  const currentMap = state.entities.reliefMap[mapId];
 
   return {
-    user,
+    currentUser,
+    currentMap,
     modal: state.ui.modal,
     drawer: state.ui.drawer.drawerType,
   };
@@ -48,10 +52,11 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Header extends Component {
   static propTypes = {
-    user: PropTypes.shape({
+    currentUser: PropTypes.shape({
       firstName: PropTypes.string,
       email: PropTypes.string,
     }),
+    currentMap: PropTypes.object,
 
     // Buttons
     onClickSignIn: PropTypes.func,
@@ -75,7 +80,7 @@ export default class Header extends Component {
 
   renderLoggedIn = () =>
     <div className={css.buttons}>
-      <h4 className={css.email}>{ `Welcome ${this.props.user.firstName}!`}</h4>
+      <h4 className={css.email}>{ `Welcome ${this.props.currentUser.firstName}!`}</h4>
       <Button
         onClick={() => this.props.onClickCreateMap()}
         color="blue"
@@ -116,6 +121,7 @@ export default class Header extends Component {
         />
         <h1 style={{margin: '15px'}}>{ text.liefbase }</h1>
       </div>
-      { this.props.user ? this.renderLoggedIn() : this.renderLoggedOut() }
+      { this.props.currentMap && <h3 style={{ margin: '0' }}>{this.props.currentMap.name}</h3> }
+      { this.props.currentUser ? this.renderLoggedIn() : this.renderLoggedOut() }
     </div>
 }

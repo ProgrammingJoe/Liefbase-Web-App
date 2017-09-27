@@ -1,119 +1,86 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import './MapContainer.css';
+
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Map, TileLayer, ZoomControl, AttributionControl } from 'react-leaflet';
-import R from 'ramda';
-
-import { showInfo as showInfoDrawer } from '../../redux/ui/drawer';
-
-import {
-  showUpdateEntity as showUpdateEntityModal
-} from '../../redux/ui/modal';
-
-import EditableLayer from './EditableLayer';
 
 import css from './MapContainer.css';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+  const id = state.ui.map.selectedMapId;
+  const map = state.entities.reliefMap[id];
+
+  // todo: do these in redux state
+  const tileMap = {
+    name: 'OpenStreetMap',
+    url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 20,
+  };
+  const position = {
+    center: [48.4284, -123.3656],
+    zoom: 13,
+  };
+  const bounds = undefined;
+  // either position or bounds should be set
+  const clearBounds = () => console.log('clearBounds');
+
   return {
-    maps: state.entities.reliefMap,
-    selectedMapId: state.ui.reliefMapId,
-    tileMap: state.ui.tileMap,
-    position: state.ui.position,
-    bounds: state.ui.bounds,
-    entityFilter: state.ui.entityFilter,
+    map,
+    tileMap,
+    bounds,
+    position,
+    clearBounds,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  showInfoDrawer: () => dispatch(showInfoDrawer()),
-  showUpdateEntityModal: (entity) => dispatch(showUpdateEntityModal(entity)),
-});
-
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(mapStateToProps)
 export default class MapContainer extends Component {
   static propTypes = {
+    map: PropTypes.object,
+    tileMap: PropTypes.object,
     position: PropTypes.object,
     bounds: PropTypes.array,
-    maps: PropTypes.object,
-    selectedMapId: PropTypes.number,
-    tileMap: PropTypes.object,
 
-    showInfoDrawer: PropTypes.func,
-    showUpdateEntityModal: PropTypes.func,
-    entityFilter: PropTypes.array,
+    clearBounds: PropTypes.func,
   };
 
-  onMapClick() {
-    this.props.deselectAllEntities();
+  componentDidMount() {
+    window.L = L;
+    window.map = this.leafletMap.leafletElement;
+    this.forceUpdate();
+  }
+
+  componentWillUnmount() {
+    const leafletMap = this.leafletMap.leafletElement;
+    leafletMap.off('click', this.onMapClick);
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.tileMap || !this.props.tileMap) return; // todo fix this.
-
     if(prevProps.tileMap.attribution !== this.props.tileMap.attribution){
       this.leafletAttrib.leafletElement
           .removeAttribution(prevProps.tileMap.attribution);
       this.leafletAttrib.leafletElement
           .addAttribution(this.props.tileMap.attribution);
     }
+    this.leafletMap.leafletElement.setMaxZoom(this.props.tileMap.maxZoom);
   }
 
-  onClickMarker(id, type) {
-    return () => {
-      this.props.selectEntity(id, type);
-      this.props.showInfoDrawer();
-    };
-  }
-
-  renderMap() {
-    const leafletMap = this.leafletMap.leafletElement;
-    this.map = leafletMap;
-    leafletMap.on('click', (e) => this.onMapClick(e));
-
-    window.L = L;
-    window.map = this.leafletMap.leafletElement;
-
-    const {
-      maps,
-      selectedMapId,
-      tileMap,
-      entityFilter
-    } = this.props;
-    const map = maps.find(map => map.id === selectedMapId);
-
-    let entities = [];
-    if (map) {
-      const { hazardTemplates, resourceTemplates } = map;
-      entities = map.entities.map(i => {
-        switch(i.entityType) {
-          case 'hazard':
-            return {...i, template: hazardTemplates[i.properties.template_id]};
-          case 'resource':
-            return {...i, template: resourceTemplates[i.properties.template_id]};
-        }
-      });
-      if(entityFilter.length > 0){
-        entities = entities.filter(i => {
-          const template = {kind: i.entityType, id: i.properties.template_id};
-          const val = R.contains(template, entityFilter);
-          return !val;
-        });
-      }
-    }
+  render() {
+    const { map, tileMap, position, bounds, clearBounds } = this.props;
 
     return (
       <Map
-        viewport={this.props.position}
-        bounds={this.props.bounds}
+        viewport={position}
+        bounds={bounds}
         animate
         useFlyTo
         ref={m => this.leafletMap = m}
-        id={css.map}
+        id="mainReliefMap"
 
-        onViewportChanged={this.props.clearBounds}
+        onViewportChanged={clearBounds}
 
         zoomControl={false}
         maxZoom={tileMap.maxZoom}
@@ -125,30 +92,7 @@ export default class MapContainer extends Component {
           url={tileMap.url}
           attribution={tileMap.attribution}
         />
-        <EditableLayer
-          map={this.map}
-          entities={entities}
-          onUpdate={this.props.updateEntity}
-          onCreate={this.props.createEntity}
-          onDelete={this.props.deleteEntity}
-          showUpdateModal={this.props.showUpdateEntityModal}
-          onClickMarker={(id, type) => this.onClickMarker(id, type)}
-        />
       </Map>
-    );
-  }
-
-  renderPlaceHolder = () =>
-    <div className={css.placeHolderContainer}>
-      <p>No map selected</p>
-    </div>
-
-  render() {
-    const { selectedMapId: mapExists } = this.props;
-    return (
-      <div className={css.mapContainer}>
-        { mapExists ? this.renderMap() : this.renderPlaceHolder() }
-      </div>
     );
   }
 }
