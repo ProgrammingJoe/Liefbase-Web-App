@@ -6,9 +6,10 @@ import { denormalize } from 'normalizr';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Map,
-  TileLayer,
+  LayersControl,
   ZoomControl,
-  GeoJSON
+  TileLayer,
+  GeoJSON,
 } from 'react-leaflet';
 
 import schemas from '../../schema';
@@ -21,12 +22,6 @@ const mapStateToProps = state => {
   const templates = denormalize(map.mapItemTemplates, [schemas.mapItemTemplate], state.entities);
 
   // todo: do these in redux state
-  const tileMap = {
-    name: 'OpenStreetMap',
-    url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 20,
-  };
   const position = {
     center: [48.4284, -123.3656],
     zoom: 13,
@@ -37,7 +32,6 @@ const mapStateToProps = state => {
 
   return {
     templates,
-    tileMap,
     bounds,
     position,
     clearBounds,
@@ -49,7 +43,6 @@ export default class MapContainer extends Component {
   static propTypes = {
     templates: PropTypes.array,
 
-    tileMap: PropTypes.object,
     position: PropTypes.object,
     bounds: PropTypes.array,
 
@@ -67,16 +60,6 @@ export default class MapContainer extends Component {
     leafletMap.off('click', this.onMapClick);
   }
 
-  componentDidUpdate(prevProps) {
-    if(prevProps.tileMap.attribution !== this.props.tileMap.attribution){
-      this.leafletAttrib.leafletElement
-          .removeAttribution(prevProps.tileMap.attribution);
-      this.leafletAttrib.leafletElement
-          .addAttribution(this.props.tileMap.attribution);
-    }
-    this.leafletMap.leafletElement.setMaxZoom(this.props.tileMap.maxZoom);
-  }
-
   render() {
     const { templates, tileMap, position, bounds, clearBounds } = this.props;
 
@@ -87,20 +70,33 @@ export default class MapContainer extends Component {
         animate
         useFlyTo
         ref={m => this.leafletMap = m}
-        id="mainReliefMap"
+        style={{ width: '100%' }}
 
         onViewportChanged={clearBounds}
 
         zoomControl={false}
-        maxZoom={tileMap.maxZoom}
         attributionControl={false}
       >
         <ZoomControl position="bottomright" />
-        <TileLayer
-          url={tileMap.url}
-          attribution={tileMap.attribution}
-        />
-        { templates.map(t => <GeoJSON data={t.mapItems} />) }
+
+        <LayersControl position='topright'>
+          <LayersControl.BaseLayer name='OpenStreetMap' checked>
+            <TileLayer
+              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name='OpenStreetMap.BlackAndWhite'>
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url='http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+            />
+          </LayersControl.BaseLayer>
+          { templates.map(template =>
+            <LayersControl.Overlay name={template.name} checked>
+              <GeoJSON data={template.mapItems} />
+            </LayersControl.Overlay>) }
+        </LayersControl>
       </Map>
     );
   }
