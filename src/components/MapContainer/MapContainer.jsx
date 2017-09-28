@@ -61,8 +61,15 @@ export default class MapContainer extends Component {
     leafletMap.off('click', this.onMapClick);
   }
 
+  handleMarkerDragEnd = e => {
+    const id = e.target.feature.id;
+    const newGeometry = e.target.getLatLng();
+
+    // todo: update mapItem of id with new geometry
+  }
+
   render() {
-    const { templates, tileMap, position, bounds, clearBounds } = this.props;
+    const { templates, position, bounds, clearBounds } = this.props;
 
     return (
       <Map
@@ -104,8 +111,14 @@ export default class MapContainer extends Component {
           </LayersControl.BaseLayer>
 
           { templates.map(template =>
-            <LayersControl.Overlay name={template.name} checked>
-              <GeoJSON data={template.mapItems} />
+            <LayersControl.Overlay key={template.id} name={template.name} checked>
+              <GeoJSON
+                data={template.mapItems}
+                onEachFeature={(feature, layer) => {
+                  layer.on('dragend', this.handleMarkerDragEnd);
+                  layer.options.draggable = true;
+                }}
+              />
             </LayersControl.Overlay>) }
         </LayersControl>
       </Map>
