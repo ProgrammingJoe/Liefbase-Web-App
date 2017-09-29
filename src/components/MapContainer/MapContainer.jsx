@@ -9,9 +9,13 @@ import { Map,
   LayersControl,
   ScaleControl,
   ZoomControl,
-  TileLayer,
+  FeatureGroup,
   GeoJSON,
+  TileLayer,
 } from 'react-leaflet';
+
+import 'leaflet-draw/dist/leaflet.draw.css';
+import { EditControl } from 'react-leaflet-draw';
 
 import actions from '../../redux/entities/actionCreators';
 
@@ -89,6 +93,15 @@ export default class MapContainer extends Component {
     }
   }
 
+  handleCreate = e => {
+    console.log(e);
+    // todo:
+    //   -pop open the create mapItem modal
+    //   -remove created layer from map
+    //   -update the appropriate geojson layer on success (note data is not a dynamic prop so we need to figure out how to reconstruct child?)
+    //   -display message on failure
+  }
+
   render() {
     const { templates, position, bounds, clearBounds } = this.props;
 
@@ -100,6 +113,7 @@ export default class MapContainer extends Component {
         useFlyTo
         ref={m => this.leafletMap = m}
         style={{ width: '100%' }}
+        zoomControl={false}
 
         onViewportChanged={clearBounds}
       >
@@ -144,6 +158,24 @@ export default class MapContainer extends Component {
               />
             </LayersControl.Overlay>) }
         </LayersControl>
+        {/* todo: only display this if member or admin of map */}
+        <FeatureGroup>
+          <EditControl
+            position='topright'
+            onCreated={this.handleCreate}
+            draw={{
+              circle: false,
+              circlemarker: false,
+              polygon: false,
+              polyline: false,
+              rectangle: false,
+            }}
+            edit={{
+              edit: false,
+              remove: false,
+            }}
+          />
+        </FeatureGroup>
       </Map>
     );
   }

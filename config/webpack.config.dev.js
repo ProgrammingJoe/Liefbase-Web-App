@@ -174,7 +174,7 @@ module.exports = {
       },
       // special exception for leaflet css, it uses relative urls so no modules
       {
-        test: /leaflet\.css$/,
+        test: /leaflet.*\.css$/,
         use: [
           require.resolve('style-loader'),
           {

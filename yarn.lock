@@ -5214,6 +5214,10 @@ react-error-overlay@^1.0.7:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
+react-leaflet-draw@^0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet-draw/-/react-leaflet-draw-0.16.0.tgz#d7b64442113bac8d73f976eb33b5c8cf24867cbb"
+
 react-leaflet@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.7.0.tgz#bfafc72aeb978d2e91638344b7991d2da12901ae"
