@@ -13,6 +13,8 @@ import { Map,
   GeoJSON,
 } from 'react-leaflet';
 
+import actions from '../../redux/entities/actionCreators';
+
 import schemas from '../../schema';
 
 const mapStateToProps = state => {
@@ -39,15 +41,21 @@ const mapStateToProps = state => {
   };
 };
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+  updateMapItem: (values) => dispatch(actions.mapItem.update(values)),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class MapContainer extends Component {
   static propTypes = {
+    // mapStateToProps
     templates: PropTypes.array,
-
     position: PropTypes.object,
     bounds: PropTypes.array,
-
     clearBounds: PropTypes.func,
+
+    // mapDispatchToProps
+    updateMapItem: PropTypes.func
   };
 
   componentDidMount() {
@@ -61,11 +69,24 @@ export default class MapContainer extends Component {
     leafletMap.off('click', this.onMapClick);
   }
 
-  handleMarkerDragEnd = e => {
+  handleMarkerDragEnd = async e => {
     const id = e.target.feature.id;
-    const newGeometry = e.target.getLatLng();
+    const { lat, lng } = e.target.getLatLng();
 
-    // todo: update mapItem of id with new geometry
+    try {
+      await this.props.updateMapItem({
+        id,
+        geometry: {
+          type: "Point",
+          coordinates: [lat, lng],
+        },
+      });
+    } catch(err) {
+      const oldGeometry = e.target.feature.geometry.coordinates;
+      e.target.setLatLng(oldGeometry);
+
+      // todo: alert user of error updating marker
+    }
   }
 
   render() {
@@ -116,6 +137,8 @@ export default class MapContainer extends Component {
                 data={template.mapItems}
                 onEachFeature={(feature, layer) => {
                   layer.on('dragend', this.handleMarkerDragEnd);
+
+                  // todo: only dragable if member or admin of this map.
                   layer.options.draggable = true;
                 }}
               />
