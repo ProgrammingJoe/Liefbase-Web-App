@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { denormalize } from 'normalizr';
 
 import { hideModal } from '../../../../redux/ui/modal';
 import actions from '../../../../redux/entities/actionCreators';
-import { selectMap } from '../../../../redux/ui/map';
+
+import schemas from '../../../../schema';
 
 import {
   Button,
@@ -14,15 +16,21 @@ import {
 
 import SemanticUiField from '../../../SemanticReduxFormField';
 
-const FORM_NAME = 'reliefMapForm';
+const FORM_NAME = 'mapItemForm';
 
-const reliefMapForm = {
+const mapItemForm = {
   form: FORM_NAME,
   validate: (values) => {
     const errors = {};
 
-    if (!values.name) {
-      errors.name = "This field is required.";
+    if (!values.mapItemTemplate) {
+      errors.template = "This field is required.";
+    }
+
+    if (!values.quantity) {
+      errors.quantity = "This field is required.";
+    } else if (values.quantity < 0) {
+      errors.quantity = "Must be greater than 0";
     }
 
     return errors;
@@ -31,24 +39,37 @@ const reliefMapForm = {
 
 const mapStateToProps = state => {
   const id = state.ui.modal.updateId;
-  const map = state.entities.reliefMap[id] || {};
-  const { name, description } = map;
+  const mapItem = state.entities.mapItem[id] || {};
+  const { mapItemTemplate, quantity } = mapItem;
+
+  const mapId = state.ui.map.selectedMapId;
+  const map = state.entities.reliefMap[mapId];
+  const templates = denormalize(map.mapItemTemplates, [schemas.mapItemTemplate], state.entities);
+
+  const entity = state.ui.modal.entity;
 
   return {
     id,
+    entity,
+    templates,
     initialValues: {
-      name,
-      description,
+      mapItemTemplate,
+      quantity,
     }
   };
 };
 
 @connect(mapStateToProps)
-@reduxForm(reliefMapForm)
+@reduxForm(mapItemForm)
 export default class ReliefMapForm extends Component {
   static propTypes = {
     // mapStateToProps
+    // populated if update
     id: PropTypes.number,
+    // populated if create
+    entity: PropTypes.object,
+    templates: PropTypes.array,
+
 
     // redux-form
     handleSubmit: PropTypes.func,
@@ -58,22 +79,31 @@ export default class ReliefMapForm extends Component {
 
   handleSubmit = async (values, dispatch) => {
     const id = this.props.id;
+
     const newValues = {
-      ...values,
       id,
+      type: "Feature",
+      geometry: {
+        type: "Point",
+      },
+      properties: values,
     };
-    const action = id ? actions.reliefMap.update : actions.reliefMap.create;
+
+    // creation
+    if (!id) {
+      const { lng, lat } = this.props.entity;
+      newValues.geometry.coordinates = [lng, lat];
+    }
+
+    const action = id ? actions.mapItem.update : actions.mapItem.create;
 
     try {
-      const newMap = await dispatch(action(newValues));
-
-      // select a freshly created map
-      if (!id) {
-        dispatch(selectMap(newMap));
-      }
+      await dispatch(action(newValues));
       dispatch(hideModal());
     } catch (err) {
       const errors = {};
+
+      console.log(err);
 
       if (err.response) {
         Object.keys(err.response.data).forEach(k => errors[k] = err.response.data[k].join('\n'));
@@ -86,22 +116,24 @@ export default class ReliefMapForm extends Component {
   render = () =>
     <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
       <Form.Field>
+        {/* todo: use some sort of dropdown or template selector here */}
         <Field
           component={SemanticUiField}
           as={Form.Input}
           type="text"
-          name="name"
-          placeholder="Example Map"
-          label="Name"
+          name="mapItemTemplate"
+          placeholder="1"
+          label="Template"
       />
       </Form.Field>
       <Form.Field>
         <Field
           component={SemanticUiField}
-          as={Form.TextArea}
-          name="description"
-          placeholder="A short map description."
-          label="Description"
+          as={Form.Input}
+          type="text"
+          name="quantity"
+          placeholder="42"
+          label="Quantity"
       />
       </Form.Field>
       <Button

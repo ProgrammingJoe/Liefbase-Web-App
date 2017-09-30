@@ -18,6 +18,7 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import { EditControl } from 'react-leaflet-draw';
 
 import actions from '../../redux/entities/actionCreators';
+import { showCreateMapItem } from '../../redux/ui/modal';
 
 import schemas from '../../schema';
 
@@ -28,25 +29,21 @@ const mapStateToProps = state => {
   // todo: put this in reselect eventually..
   const templates = denormalize(map.mapItemTemplates, [schemas.mapItemTemplate], state.entities);
 
-  // todo: do these in redux state
-  const position = {
-    center: [48.4284, -123.3656],
-    zoom: 13,
-  };
-  const bounds = undefined;
-  // either position or bounds should be set
-  const clearBounds = () => console.log('clearBounds');
+  // todo: do this in redux state based on map entities, default to victoria bounds.
+  const bounds = [
+    [40.712, -74.227],
+    [40.774, -74.125],
+  ];
 
   return {
     templates,
     bounds,
-    position,
-    clearBounds,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   updateMapItem: (values) => dispatch(actions.mapItem.update(values)),
+  showCreateMapItem: (values) => dispatch(showCreateMapItem(values)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -54,12 +51,11 @@ export default class MapContainer extends Component {
   static propTypes = {
     // mapStateToProps
     templates: PropTypes.array,
-    position: PropTypes.object,
     bounds: PropTypes.array,
-    clearBounds: PropTypes.func,
 
     // mapDispatchToProps
-    updateMapItem: PropTypes.func
+    updateMapItem: PropTypes.func,
+    showCreateMapItem: PropTypes.func,
   };
 
   componentDidMount() {
@@ -94,28 +90,25 @@ export default class MapContainer extends Component {
   }
 
   handleCreate = e => {
-    console.log(e);
+    this.props.showCreateMapItem(e.layer.getLatLng());
+    e.layer.remove();
+
     // todo:
-    //   -pop open the create mapItem modal
-    //   -remove created layer from map
     //   -update the appropriate geojson layer on success (note data is not a dynamic prop so we need to figure out how to reconstruct child?)
-    //   -display message on failure
+    //   -display message on failure?
   }
 
   render() {
-    const { templates, position, bounds, clearBounds } = this.props;
+    const { templates, bounds } = this.props;
 
     return (
       <Map
-        viewport={position}
         bounds={bounds}
         animate
         useFlyTo
         ref={m => this.leafletMap = m}
         style={{ width: '100%' }}
         zoomControl={false}
-
-        onViewportChanged={clearBounds}
       >
         <ScaleControl position="bottomright" />
         <ZoomControl position="bottomright" />

@@ -2,55 +2,53 @@ const HIDE_MODAL = 'HIDE_MODAL';
 const SHOW_SIGN_IN_MODAL = 'SHOW_SIGN_IN_MODAL';
 const SHOW_REGISTER_MODAL = 'SHOW_REGISTER_MODAL';
 const SHOW_CREATE_MAP_MODAL = 'SHOW_CREATE_MAP_MODAL';
-const SHOW_UPDATE_ENTITY_MODAL = 'SHOW_UPDATE_ENTITY_MODAL';
 const SHOW_UPDATE_MAP_MODAL = 'SHOW_UPDATE_MAP_MODAL';
+const SHOW_CREATE_MAP_ITEM_MODAL = 'SHOW_CREATE_MAP_ITEM_MODAL';
+const SHOW_UPDATE_MAP_ITEM_MODAL = 'SHOW_UPDATE_MAP_ITEM_MODAL';
 
-export function showRegister() {
-  return {
+
+export const showRegister = () => ({
     type: SHOW_REGISTER_MODAL,
-  };
-}
+});
 
-export function showSignIn() {
-  return {
+export const showSignIn = () => ({
     type: SHOW_SIGN_IN_MODAL,
-  };
-}
+});
 
-export function hideModal() {
-  return {
+export const hideModal = () => ({
     type: HIDE_MODAL,
-  };
-}
+});
 
-export function showCreateMap() {
-  return {
+export const showCreateMap = () => ({
     type: SHOW_CREATE_MAP_MODAL,
-  };
-}
+});
 
-export function showUpdateMap(payload) {
-  return {
+export const showUpdateMap = payload => ({
     type: SHOW_UPDATE_MAP_MODAL,
     payload,
-  };
-}
+});
 
-export function showUpdateEntity(entity) {
-  return {
-    type: SHOW_UPDATE_ENTITY_MODAL,
-    entity,
-  };
-}
+export const showCreateMapItem = entity => ({
+  type: SHOW_CREATE_MAP_ITEM_MODAL,
+  entity,
+});
+
+export const showUpdateMapItem = payload => ({
+    type: SHOW_UPDATE_MAP_ITEM_MODAL,
+    payload,
+});
 
 const initialState = {
   modalType: null,
+  updateId: null,
   entity: null,
-  updateMapId: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch(action.type){
+  case HIDE_MODAL:
+    return initialState;
+
   case SHOW_SIGN_IN_MODAL:
     return {
       ...state,
@@ -63,27 +61,31 @@ export default function reducer(state = initialState, action) {
       modalType: 'REGISTER',
     };
 
-  case HIDE_MODAL:
-    return initialState;
-
   case SHOW_CREATE_MAP_MODAL:
     return {
       ...state,
       modalType: 'CREATE_MAP',
     };
 
-  case SHOW_UPDATE_ENTITY_MODAL:
-    return {
-      ...state,
-      modalType: 'UPDATE_ENTITY',
-      entity: action.entity,
-    };
-
   case SHOW_UPDATE_MAP_MODAL:
     return {
       ...state,
       modalType: 'UPDATE_MAP',
-      updateMapId: action.payload.id,
+      updateId: action.payload.id,
+    };
+
+  case SHOW_CREATE_MAP_ITEM_MODAL:
+    return {
+      ...state,
+      modalType: 'CREATE_MAP_ITEM',
+      entity: action.entity,
+    };
+
+  case SHOW_UPDATE_MAP_ITEM_MODAL:
+    return {
+      ...state,
+      modalType: 'UPDATE_MAP_ITEM',
+      updateId: action.payload.id,
     };
   }
 

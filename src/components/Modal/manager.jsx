@@ -7,7 +7,7 @@ import { hideModal } from '../../redux/ui/modal';
 import SignInModal from './SignInModal';
 import RegisterModal from './RegisterModal';
 import ReliefMapModal from './ReliefMapModal';
-import UpdateEntityModal from './UpdateEntityModal';
+import MapItemModal from './MapItemModal';
 
 const mapStateToProps = state => ({
   modalType: state.ui.modal.modalType,
@@ -37,8 +37,11 @@ export default class ModalManager extends Component {
     case 'UPDATE_MAP':
       return <ReliefMapModal title="Update Map" {...this.props} />;
 
-    case 'UPDATE_ENTITY':
-      return <UpdateEntityModal title="Update Details" {...this.props} />;
+    case 'CREATE_MAP_ITEM':
+      return <MapItemModal title="Create Resource" {...this.props} />;
+
+    case 'UPDATE_MAP_ITEM':
+      return <MapItemModal title="Update Resource" {...this.props} />;
     }
 
     return null;

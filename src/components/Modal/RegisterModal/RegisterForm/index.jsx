@@ -15,7 +15,7 @@ import {
 
 import SemanticUiField from '../../../SemanticReduxFormField';
 
-const FORM_NAME = 'register';
+const FORM_NAME = 'registerForm';
 
 const registerForm = {
   form: FORM_NAME,
