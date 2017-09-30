@@ -73,14 +73,18 @@ export default class MapContainer extends Component {
     const id = e.target.feature.id;
     const { lat, lng } = e.target.getLatLng();
 
+    const newValues = {
+      id,
+      // added for proper drf geojson serialization
+      properties: {},
+      geometry: {
+        type: "Point",
+        coordinates: [lng, lat],
+      },
+    };
+
     try {
-      await this.props.updateMapItem({
-        id,
-        geometry: {
-          type: "Point",
-          coordinates: [lat, lng],
-        },
-      });
+      await this.props.updateMapItem(newValues);
     } catch(err) {
       const oldGeometry = e.target.feature.geometry.coordinates;
       e.target.setLatLng(oldGeometry);
