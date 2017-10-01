@@ -4,7 +4,7 @@ import { entitySuccess } from '../entities/actionCreators';
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 
-const signInSuccess = (payload) => ({
+const signInSuccess = payload => ({
   type: SIGN_IN_SUCCESS,
   payload,
 });
@@ -26,7 +26,7 @@ export const signIn = (values) => {
 
     const userResponse = await api.user.getCurrent();
     dispatch(signInSuccess(userResponse.data));
-    dispatch(entitySuccess('user')(userResponse.data));
+    dispatch(entitySuccess(userResponse.data));
   };
 };
 
@@ -45,7 +45,7 @@ export const refresh = () => {
 
       const userResponse = await api.user.getCurrent();
       dispatch(signInSuccess(userResponse.data));
-      dispatch(entitySuccess('user')(userResponse.data));
+      dispatch(entitySuccess(userResponse.data));
     } catch (err) {
       dispatch(signOut());
     }
@@ -61,7 +61,7 @@ export default function reducer(state = initialState, action) {
   case SIGN_IN_SUCCESS:
     return {
       ...state,
-      currentUserId: action.payload.id,
+      currentUserId: action.payload.user.id,
     };
 
   case SIGN_OUT_SUCCESS:

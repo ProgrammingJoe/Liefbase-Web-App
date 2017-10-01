@@ -1,24 +1,24 @@
-import { normalize } from 'normalizr';
-
 import api from '../../../api';
-import schemas, { entities } from '../../../schema';
+import { entities } from '../../../schema';
 
-export const entitySuccess = entityName => data => {
-  const normalized = normalize(data, schemas[entityName]);
-  const entities = normalized.entities;
+export const entitySuccess = data => {
+  const entities = {};
+
+  Object.keys(data).forEach(name => {
+    entities[name] = {};
+
+    // todo: do pluralization properly
+    if (name.slice(-1) !== 's') {
+      entities[name][data[name].id] = data[name];
+    } else {
+      const singularName = name.slice(0, -1);
+      entities[singularName] = {};
+      data[name].forEach(entity => entities[singularName][entity.id] = entity);
+    }
+  });
 
   return {
     type: 'ENTITY_SUCCESS',
-    entities,
-  };
-};
-
-const listEntitiesSuccess = entityName => data => {
-  const normalized = normalize(data, [schemas[entityName]]);
-  const entities = normalized.entities;
-
-  return {
-    type: 'LIST_ENTITIES_SUCCESS',
     entities,
   };
 };
@@ -31,31 +31,31 @@ const destroySuccess = entityName => data => ({
 
 const get = entityName => values => async dispatch => {
   const response = await api[entityName].get(values);
-  dispatch(entitySuccess(entityName)(response.data));
+  dispatch(entitySuccess(response.data));
   return response.data;
 };
 
 const list = entityName => () => async dispatch => {
   const response = await api[entityName].list();
-  dispatch(listEntitiesSuccess(entityName)(response.data));
+  dispatch(entitySuccess(response.data));
   return response.data;
 };
 
 const create = entityName => values => async dispatch => {
   const response = await api[entityName].create(values);
-  dispatch(entitySuccess(entityName)(response.data));
+  dispatch(entitySuccess(response.data));
   return response.data;
 };
 
 const update = entityName => values => async dispatch => {
   const response = await api[entityName].update(values);
-  dispatch(entitySuccess(entityName)(response.data));
+  dispatch(entitySuccess(response.data));
   return response.data;
 };
 
 const destroy = entityName => values => async dispatch => {
   await api[entityName].destroy(values);
-  dispatch(destroySuccess(entityName)(values));
+  dispatch(destroySuccess(values));
   return true;
 };
 
