@@ -6,6 +6,7 @@ import schemas, { entities } from '../../../schema';
 export const entitySuccess = entityName => data => {
   const normalized = normalize(data, schemas[entityName]);
   const entities = normalized.entities;
+
   return {
     type: 'ENTITY_SUCCESS',
     entities,
@@ -15,6 +16,7 @@ export const entitySuccess = entityName => data => {
 const listEntitiesSuccess = entityName => data => {
   const normalized = normalize(data, [schemas[entityName]]);
   const entities = normalized.entities;
+
   return {
     type: 'LIST_ENTITIES_SUCCESS',
     entities,
@@ -53,7 +55,7 @@ const update = entityName => values => async dispatch => {
 
 const destroy = entityName => values => async dispatch => {
   await api[entityName].destroy(values);
-  dispatch(destroySuccess(values));
+  dispatch(destroySuccess(entityName)(values));
   return true;
 };
 

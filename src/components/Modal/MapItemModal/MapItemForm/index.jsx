@@ -103,8 +103,6 @@ export default class ReliefMapForm extends Component {
     } catch (err) {
       const errors = {};
 
-      console.log(err);
-
       if (err.response) {
         Object.keys(err.response.data).forEach(k => errors[k] = err.response.data[k].join('\n'));
       }

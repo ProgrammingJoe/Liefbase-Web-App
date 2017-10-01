@@ -28,28 +28,45 @@ const {
   user,
 } = schemas;
 
-filterPreset.define({});
+filterPreset.define({
+  // todo: define me properly.
+});
 
-mapItem.define({});
+mapItem.define({
+  properties: {
+    mapItemTemplate
+  },
+});
 
 mapItemTemplate.define({
+  reliefMap: reliefMap,
   mapItems: {
     features: [mapItem],
   },
 });
 
-membership.define({});
+membership.define({
+  // todo: define me properly.
+});
 
-organization.define({});
+organization.define({
+  // todo: define me properly.
+});
 
 reliefMap.define({
   mapItemTemplates: [mapItemTemplate],
 });
 
-team.define({});
+team.define({
+  // todo: define me properly.
+});
 
-templatePreset.define({});
+templatePreset.define({
+  // todo: define me properly.
+});
 
-user.define({});
+user.define({
+  // todo: define me properly.
+});
 
 export default schemas;

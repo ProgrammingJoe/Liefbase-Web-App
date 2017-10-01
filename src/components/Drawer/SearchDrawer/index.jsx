@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch) => ({
   listMaps: () => dispatch(actions.reliefMap.list()),
   selectMap: (map) => dispatch(selectMap(map)),
   setSearchText: (text) => dispatch(setSearchText(text)),
-  destroyMap: (map) => dispatch(destroyMap(map)),
+  destroyMap: (map) => dispatch(actions.reliefMap.destroy(map)),
   updateMap: (map) => dispatch(showUpdateMap(map)),
 });
 
