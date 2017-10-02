@@ -31,11 +31,22 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getMap: async values => {
+    // todo: polyfill for URLSearchParams?
+    const params = new URLSearchParams();
+    params.append('include[]', 'mapItemTemplates.*');
+    params.append('include[]', 'mapItemTemplates.mapItems.*');
+
+    return await dispatch(actions.reliefMap.get({
+      values,
+      params,
+    }));
+  },
   listMaps: () => dispatch(actions.reliefMap.list()),
-  selectMap: (map) => dispatch(selectMap(map)),
-  setSearchText: (text) => dispatch(setSearchText(text)),
-  destroyMap: (map) => dispatch(actions.reliefMap.destroy(map)),
-  updateMap: (map) => dispatch(showUpdateMap(map)),
+  selectMap: map => dispatch(selectMap(map)),
+  setSearchText: text => dispatch(setSearchText(text)),
+  destroyMap: map => dispatch(actions.reliefMap.destroy(map)),
+  updateMap: map => dispatch(showUpdateMap(map)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -90,7 +101,17 @@ export default class SearchDrawer extends Component {
               <div key={map.id}>
                 <Menu.Item
                   name={map.name}
-                  onClick={() => this.props.selectMap(map)}
+                  onClick={ async () => {
+                    try {
+                      const result = await this.props.getMap(map);
+                      console.log(result);
+                      console.log();
+                    } catch (err) {
+                      console.error(err);
+                    }
+
+                    this.props.selectMap(map);
+                  }}
                   active={ map.id === this.props.selectedMapId }
                   style={{ display: 'flex', wordBreak: 'break-all' }}
                 >

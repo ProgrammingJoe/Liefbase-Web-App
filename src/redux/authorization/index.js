@@ -4,9 +4,9 @@ import { entitySuccess } from '../entities/actionCreators';
 const SIGN_IN_SUCCESS = 'SIGN_IN_SUCCESS';
 const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 
-const signInSuccess = payload => ({
+const signInSuccess = response => ({
   type: SIGN_IN_SUCCESS,
-  payload,
+  payload: response.data,
 });
 
 const signOutSuccess = () => ({
@@ -19,14 +19,14 @@ export const signOut = () => dispatch => {
 };
 
 // ex. values = { username, password }
-export const signIn = (values) => {
+export const signIn = options => {
   return async dispatch => {
-    const response = await api.authorization.signIn(values);
+    const response = await api.authorization.signIn(options);
     localStorage.setItem('token', response.data.token);
 
     const userResponse = await api.user.getCurrent();
-    dispatch(signInSuccess(userResponse.data));
-    dispatch(entitySuccess(userResponse.data));
+    dispatch(signInSuccess(userResponse));
+    dispatch(entitySuccess(userResponse));
   };
 };
 
@@ -44,8 +44,8 @@ export const refresh = () => {
       localStorage.setItem('token', response.data.token);
 
       const userResponse = await api.user.getCurrent();
-      dispatch(signInSuccess(userResponse.data));
-      dispatch(entitySuccess(userResponse.data));
+      dispatch(signInSuccess(userResponse));
+      dispatch(entitySuccess(userResponse));
     } catch (err) {
       dispatch(signOut());
     }

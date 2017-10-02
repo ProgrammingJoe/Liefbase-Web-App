@@ -1,9 +1,9 @@
 import request from 'axios';
 import urls from './urls' ;
 
-export const signIn = (values) => request.post(urls.signIn, values);
-export const verify = (values) => request.post(urls.verify, values);
-export const refresh = (values) => request.post(urls.refresh, values);
+export const signIn = options => request.post(urls.signIn, options.values);
+export const verify = options => request.post(urls.verify, options.values);
+export const refresh = options => request.post(urls.refresh, options.values);
 
 export default {
   refresh,

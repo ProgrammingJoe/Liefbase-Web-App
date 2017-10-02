@@ -1,7 +1,17 @@
 import api from '../../../api';
 import { entities } from '../../../schema';
 
-export const entitySuccess = data => {
+export const entitySuccess = response => {
+  const data = response.data;
+
+  if (data === undefined) {
+    return {
+      type: 'DESTROY',
+      entityName,
+      id: response.id,
+    };
+  }
+
   const entities = {};
 
   Object.keys(data).forEach(name => {
@@ -23,52 +33,20 @@ export const entitySuccess = data => {
   };
 };
 
-const destroySuccess = entityName => data => ({
-  type: 'DESTROY',
-  entityName,
-  id: data.id,
-});
-
-const get = entityName => values => async dispatch => {
-  const response = await api[entityName].get(values);
-  dispatch(entitySuccess(response.data));
-  return response.data;
-};
-
-const list = entityName => () => async dispatch => {
-  const response = await api[entityName].list();
-  dispatch(entitySuccess(response.data));
-  return response.data;
-};
-
-const create = entityName => values => async dispatch => {
-  const response = await api[entityName].create(values);
-  dispatch(entitySuccess(response.data));
-  return response.data;
-};
-
-const update = entityName => values => async dispatch => {
-  const response = await api[entityName].update(values);
-  dispatch(entitySuccess(response.data));
-  return response.data;
-};
-
-const destroy = entityName => values => async dispatch => {
-  await api[entityName].destroy(values);
-  dispatch(destroySuccess(values));
-  return true;
-};
+const methods = ['get', 'list', 'create', 'update', 'destroy'];
 
 // default behaviours for basic api tasks.
 const entityCrud = {};
 entities.forEach(e => {
-  entityCrud[e] = {
-    get: get(e),
-    list: list(e),
-    create: create(e),
-    update: update(e),
-    destroy: destroy(e),
-  };
+  entityCrud[e] = {};
+  methods.forEach(m => {
+    entityCrud[e][m] = options => async dispatch => {
+      console.log(options);
+      const response = await api[e][m](options);
+      dispatch(entitySuccess(response));
+      return response;
+    };
+  });
 });
 
 export default entityCrud;

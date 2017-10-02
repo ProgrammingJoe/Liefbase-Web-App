@@ -1,14 +1,3 @@
-export const performWithAuth = (method, ...args) => {
-  const config = {};
-
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers = { 'Authorization': `jwt ${token}` };
-  }
-
-  return method(...args, config);
-};
-
 const signIn = '/api/token-auth/';
 const refresh = '/api/token-refresh/';
 const verify = '/api/token-verify/';
