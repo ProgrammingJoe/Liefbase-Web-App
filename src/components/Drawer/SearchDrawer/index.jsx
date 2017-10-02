@@ -102,14 +102,7 @@ export default class SearchDrawer extends Component {
                 <Menu.Item
                   name={map.name}
                   onClick={ async () => {
-                    try {
-                      const result = await this.props.getMap(map);
-                      console.log(result);
-                      console.log();
-                    } catch (err) {
-                      console.error(err);
-                    }
-
+                    await this.props.getMap(map);
                     this.props.selectMap(map);
                   }}
                   active={ map.id === this.props.selectedMapId }

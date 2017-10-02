@@ -41,7 +41,6 @@ entities.forEach(e => {
   entityCrud[e] = {};
   methods.forEach(m => {
     entityCrud[e][m] = options => async dispatch => {
-      console.log(options);
       const response = await api[e][m](options);
       dispatch(entitySuccess(response));
       return response;
