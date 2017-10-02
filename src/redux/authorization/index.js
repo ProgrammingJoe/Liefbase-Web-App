@@ -40,7 +40,7 @@ export const refresh = () => {
   return async dispatch => {
     try {
       const values = { token: localStorage.getItem('token') };
-      const response = await api.authorization.refresh(values);
+      const response = await api.authorization.refresh({ values });
       localStorage.setItem('token', response.data.token);
 
       const userResponse = await api.user.getCurrent();
