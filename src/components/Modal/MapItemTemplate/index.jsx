@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import MapItemForm from './MapItemForm';
+import MapItemTemplateForm from './Form';
 
 const styles = {
   modal: {
@@ -12,5 +12,5 @@ const styles = {
 
 export default props =>
   <ModalWrapper style={styles.modal} {...props}>
-    <MapItemForm />
+    <MapItemTemplateForm />
   </ModalWrapper>;

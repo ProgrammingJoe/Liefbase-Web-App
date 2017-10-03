@@ -5,7 +5,6 @@ import { reduxForm, Field, SubmissionError } from 'redux-form';
 
 import { hideModal } from '../../../../redux/ui/modal';
 import actions from '../../../../redux/entities/actionCreators';
-import { selectMap } from '../../../../redux/ui/map';
 
 import {
   Button,
@@ -14,12 +13,20 @@ import {
 
 import SemanticUiField from '../../../SemanticReduxFormField';
 
-const FORM_NAME = 'reliefMapForm';
+const FORM_NAME = 'mapItemTemplateForm';
 
-const reliefMapForm = {
+const mapItemForm = {
   form: FORM_NAME,
   validate: (values) => {
     const errors = {};
+
+    if (!values.category) {
+      errors.category = "This field is required.";
+    }
+
+    if (!values.subCategory) {
+      errors.subCategory = "This field is required.";
+    }
 
     if (!values.name) {
       errors.name = "This field is required.";
@@ -31,24 +38,29 @@ const reliefMapForm = {
 
 const mapStateToProps = state => {
   const id = state.ui.modal.updateId;
-  const map = state.entities.reliefMap[id] || {};
-  const { name, description } = map;
+  const mapItemTemplate = state.entities.mapItemTemplate[id] || {};
+  const { category, subCategory, name } = mapItemTemplate;
+
+  const mapId = state.ui.map.selectedMapId;
 
   return {
     id,
+    mapId,
     initialValues: {
+      category,
+      subCategory,
       name,
-      description,
     }
   };
 };
 
 @connect(mapStateToProps)
-@reduxForm(reliefMapForm)
-export default class ReliefMapForm extends Component {
+@reduxForm(mapItemForm)
+export default class MapItemTemplateForm extends Component {
   static propTypes = {
     // mapStateToProps
     id: PropTypes.number,
+    mapId: PropTypes.number,
 
     // redux-form
     handleSubmit: PropTypes.func,
@@ -58,19 +70,27 @@ export default class ReliefMapForm extends Component {
 
   handleSubmit = async (values, dispatch) => {
     const id = this.props.id;
+
+    let action;
+    const params = new URLSearchParams();
+    if (id) {
+      action = actions.mapItemTemplate.update;
+    } else {
+      // update the reliefMap on creation.
+      action = actions.mapItemTemplate.create;
+      params.append('include[]', 'reliefMap.*');
+    }
+
     const newValues = {
       ...values,
-      id,
+      reliefMap: this.props.mapId,
     };
-    const action = id ? actions.reliefMap.update : actions.reliefMap.create;
 
     try {
-      const newMap = await dispatch(action(newValues));
-
-      // select a freshly created map
-      if (!id) {
-        dispatch(selectMap(newMap));
-      }
+      await dispatch(action({
+        values: newValues,
+        params,
+      }));
       dispatch(hideModal());
     } catch (err) {
       const errors = {};
@@ -90,18 +110,29 @@ export default class ReliefMapForm extends Component {
           component={SemanticUiField}
           as={Form.Input}
           type="text"
-          name="name"
-          placeholder="Example Map"
-          label="Name"
+          name="category"
+          placeholder="Resource"
+          label="Category"
       />
       </Form.Field>
       <Form.Field>
         <Field
           component={SemanticUiField}
-          as={Form.TextArea}
-          name="description"
-          placeholder="A short map description."
-          label="Description"
+          as={Form.Input}
+          type="text"
+          name="subCategory"
+          placeholder="Medical"
+          label="Sub Category"
+      />
+      </Form.Field>
+      <Form.Field>
+        <Field
+          component={SemanticUiField}
+          as={Form.Input}
+          type="text"
+          name="name"
+          placeholder="First Aid Kit"
+          label="Name"
       />
       </Form.Field>
       <Button

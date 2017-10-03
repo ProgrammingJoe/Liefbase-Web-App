@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
-import { denormalize } from 'normalizr';
 
 import { hideModal } from '../../../../redux/ui/modal';
 import actions from '../../../../redux/entities/actionCreators';
-
-import schemas from '../../../../schema';
+import { selectMap } from '../../../../redux/ui/map';
 
 import {
   Button,
@@ -16,21 +14,15 @@ import {
 
 import SemanticUiField from '../../../SemanticReduxFormField';
 
-const FORM_NAME = 'mapItemForm';
+const FORM_NAME = 'reliefMapForm';
 
-const mapItemForm = {
+const reliefMapForm = {
   form: FORM_NAME,
   validate: (values) => {
     const errors = {};
 
-    if (!values.mapItemTemplate) {
-      errors.template = "This field is required.";
-    }
-
-    if (!values.quantity) {
-      errors.quantity = "This field is required.";
-    } else if (values.quantity < 0) {
-      errors.quantity = "Must be greater than 0";
+    if (!values.name) {
+      errors.name = "This field is required.";
     }
 
     return errors;
@@ -39,37 +31,24 @@ const mapItemForm = {
 
 const mapStateToProps = state => {
   const id = state.ui.modal.updateId;
-  const mapItem = state.entities.mapItem[id] || {};
-  const { mapItemTemplate, quantity } = mapItem;
-
-  const mapId = state.ui.map.selectedMapId;
-  const map = state.entities.reliefMap[mapId];
-  const templates = denormalize(map.mapItemTemplates, [schemas.mapItemTemplate], state.entities);
-
-  const entity = state.ui.modal.entity;
+  const map = state.entities.reliefMap[id] || {};
+  const { name, description } = map;
 
   return {
     id,
-    entity,
-    templates,
     initialValues: {
-      mapItemTemplate,
-      quantity,
+      name,
+      description,
     }
   };
 };
 
 @connect(mapStateToProps)
-@reduxForm(mapItemForm)
+@reduxForm(reliefMapForm)
 export default class ReliefMapForm extends Component {
   static propTypes = {
     // mapStateToProps
-    // populated if update
     id: PropTypes.number,
-    // populated if create
-    entity: PropTypes.object,
-    templates: PropTypes.array,
-
 
     // redux-form
     handleSubmit: PropTypes.func,
@@ -79,26 +58,19 @@ export default class ReliefMapForm extends Component {
 
   handleSubmit = async (values, dispatch) => {
     const id = this.props.id;
-
     const newValues = {
+      ...values,
       id,
-      type: "Feature",
-      geometry: {
-        type: "Point",
-      },
-      properties: values,
     };
-
-    // creation
-    if (!id) {
-      const { lng, lat } = this.props.entity;
-      newValues.geometry.coordinates = [lng, lat];
-    }
-
-    const action = id ? actions.mapItem.update : actions.mapItem.create;
+    const action = id ? actions.reliefMap.update : actions.reliefMap.create;
 
     try {
-      await dispatch(action(newValues));
+      const newMap = await dispatch(action({ values: newValues }));
+
+      // select a freshly created map
+      if (!id) {
+        dispatch(selectMap(newMap));
+      }
       dispatch(hideModal());
     } catch (err) {
       const errors = {};
@@ -114,24 +86,22 @@ export default class ReliefMapForm extends Component {
   render = () =>
     <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
       <Form.Field>
-        {/* todo: use some sort of dropdown or template selector here */}
         <Field
           component={SemanticUiField}
           as={Form.Input}
           type="text"
-          name="mapItemTemplate"
-          placeholder="1"
-          label="Template"
+          name="name"
+          placeholder="Example Map"
+          label="Name"
       />
       </Form.Field>
       <Form.Field>
         <Field
           component={SemanticUiField}
-          as={Form.Input}
-          type="text"
-          name="quantity"
-          placeholder="42"
-          label="Quantity"
+          as={Form.TextArea}
+          name="description"
+          placeholder="A short map description."
+          label="Description"
       />
       </Form.Field>
       <Button

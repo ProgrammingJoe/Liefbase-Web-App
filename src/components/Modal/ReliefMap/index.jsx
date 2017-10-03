@@ -1,16 +1,16 @@
 import React from 'react';
 
 import ModalWrapper from '../ModalWrapper';
-import RegisterForm from "./RegisterForm";
+import ReliefMapForm from './Form';
 
 const styles = {
   modal: {
     padding: '1rem',
-    width: '25rem',
+    width: '40rem',
   }
 };
 
 export default props =>
   <ModalWrapper style={styles.modal} {...props}>
-    <RegisterForm />
+    <ReliefMapForm {...props} />
   </ModalWrapper>;
