@@ -39,9 +39,7 @@ mapItem.define({
 
 mapItemTemplate.define({
   reliefMap: reliefMap,
-  mapItems: {
-    features: [mapItem],
-  },
+  mapItems: [mapItem],
 });
 
 membership.define({

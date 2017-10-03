@@ -142,18 +142,23 @@ export default class MapContainer extends Component {
             />
           </LayersControl.BaseLayer>
 
-          { templates.map(template =>
-            <LayersControl.Overlay key={template.id} name={template.name} checked>
-              <GeoJSON
-                data={template.mapItems}
-                onEachFeature={(feature, layer) => {
-                  layer.on('dragend', this.handleMarkerDragEnd);
+          { templates.map(template => {
+              console.log(template.mapItems);
 
-                  // todo: only dragable if member or admin of this map.
-                  layer.options.draggable = true;
-                }}
-              />
-            </LayersControl.Overlay>) }
+              return <LayersControl.Overlay key={template.id} name={template.name} checked>
+                <GeoJSON
+                  data={template.mapItems}
+                  onEachFeature={(feature, layer) => {
+                    layer.on('dragend', this.handleMarkerDragEnd);
+
+                    // todo: only dragable if member or admin of this map.
+                    layer.options.draggable = true;
+                  }}
+                />
+              </LayersControl.Overlay>;
+            })
+          }
+
         </LayersControl>
         {/* todo: only display this if member or admin of map */}
         <FeatureGroup>
