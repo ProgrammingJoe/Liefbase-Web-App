@@ -42,12 +42,8 @@ export default class SignInForm extends Component {
   };
 
   handleSubmit = async (values, dispatch) => {
-    const options = {
-      values,
-    };
-
     try {
-      await dispatch(signIn(options));
+      await dispatch(signIn({ values }));
       dispatch(hideModal());
     } catch (err) {
       console.error(err);

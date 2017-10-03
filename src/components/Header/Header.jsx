@@ -82,7 +82,7 @@ export default class Header extends Component {
   }
 
   renderLoggedIn = () =>
-    <div className={css.buttons}>
+    <div className={css.headerSection}>
       <h4 className={css.email}>{ `Welcome ${this.props.currentUser.firstName}!`}</h4>
       <Button
         onClick={() => this.props.onClickCreateMap()}
@@ -94,13 +94,15 @@ export default class Header extends Component {
             color="green"
           ><Icon name="add" />{text.createTemplate}</Button>
       }
-      <Dropdown floating icon={<Icon name="sidebar" size="big" />} >
-        <Dropdown.Menu>
-          <Dropdown.Item text={ 'preferences' } />
-          <Dropdown.Item text={ 'about' } />
-          <Dropdown.Item text={ text.signOut } onClick={this.props.onClickSignOut} />
-        </Dropdown.Menu>
-      </Dropdown>
+      <div className={css.dropdownContainer}>
+        <Dropdown pointing="top right" icon={<Icon name="sidebar" size="big" />}>
+          <Dropdown.Menu>
+            <Dropdown.Item text='Settings' />
+            <Dropdown.Divider />
+            <Dropdown.Item text='Sign Out' onClick={this.props.onClickSignOut} />
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </div>
 
   renderLoggedOut = () =>
@@ -115,7 +117,7 @@ export default class Header extends Component {
 
   render = () =>
     <div className={css.header}>
-      <div className={css.drawerSelectors}>
+      <div className={css.headerSection}>
         <HeaderButton
           icon="search"
           onClick={() => this.props.drawer === 'SEARCH' ? this.props.hideDrawer() : this.props.openSearchDrawer()}

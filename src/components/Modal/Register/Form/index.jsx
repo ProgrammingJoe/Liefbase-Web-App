@@ -54,8 +54,8 @@ export default class RegisterForm extends Component {
 
   handleSubmit = async (values, dispatch) => {
     try {
-      await dispatch(actions.user.create(values));
-      await dispatch(signIn(values));
+      await dispatch(actions.user.create({ values }));
+      await dispatch(signIn({ values }));
       dispatch(hideModal());
     } catch (err) {
       const errors = {};
