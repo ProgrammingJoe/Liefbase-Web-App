@@ -1,0 +1,17 @@
+.drawerContainer {
+  width: 15%;
+  padding: 1rem;
+  background-color: #EEE;
+  box-shadow: 2px 2px 2px #aaa;
+  z-index: 500;
+}
+
+.title{
+  display: inline;
+}
+
+.closeButton {
+  margin-top: 2px;
+  float: right;
+  cursor: pointer;
+}

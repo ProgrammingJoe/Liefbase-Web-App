@@ -16,10 +16,12 @@ export default () => (
   <Provider store={store}>
     <div className={css.app}>
       <ModalContainer />
-      <DrawerContainer />
       <div className={css.appPage}>
         <Header />
-        <MapContainer />
+        <div className={css.contentContainer}>
+          <DrawerContainer />
+          <MapContainer />
+        </div>
       </div>
     </div>
   </Provider>

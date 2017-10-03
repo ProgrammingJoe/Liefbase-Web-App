@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { showSignIn, showRegister, showCreateMap, showCreateMapItemTemplate } from '../../redux/ui/modal';
-import { showMap, showSearch, showInfo, hideDrawer } from '../../redux/ui/drawer';
+import { showMap, hideDrawer } from '../../redux/ui/drawer';
 import {
   signOut,
   refresh as refreshSession
@@ -12,7 +12,7 @@ import {
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 import HeaderButton from './HeaderButton';
 
-import css from './Header.css';
+import css from './index.css';
 
 const text = {
   liefbase: 'liefbase',
@@ -44,9 +44,7 @@ const mapDispatchToProps = (dispatch) => ({
   onClickCreateMap: () => dispatch(showCreateMap()),
   onClickCreateTemplate: () => dispatch(showCreateMapItemTemplate()),
   onClickSignOut: () => dispatch(signOut()),
-  openMapSettingsDrawer: () => dispatch(showMap()),
-  openSearchDrawer: () => dispatch(showSearch()),
-  openInfoDrawer: () => dispatch(showInfo()),
+  openMapDrawer: () => dispatch(showMap()),
   hideDrawer: () => dispatch(hideDrawer()),
   refreshSession: () => dispatch(refreshSession()),
 });
@@ -70,9 +68,7 @@ export default class Header extends Component {
     // Drawers
     drawer: PropTypes.string,
     hideDrawer: PropTypes.func,
-    openInfoDrawer: PropTypes.func,
-    openMapSettingsDrawer: PropTypes.func,
-    openSearchDrawer: PropTypes.func,
+    openMapDrawer: PropTypes.func,
 
     refreshSession: PropTypes.func,
   };
@@ -119,16 +115,8 @@ export default class Header extends Component {
     <div className={css.header}>
       <div className={css.headerSection}>
         <HeaderButton
-          icon="search"
-          onClick={() => this.props.drawer === 'SEARCH' ? this.props.hideDrawer() : this.props.openSearchDrawer()}
-        />
-        <HeaderButton
           icon="map outline"
-          onClick={() => this.props.drawer === 'MAP' ? this.props.hideDrawer() : this.props.openMapSettingsDrawer()}
-        />
-        <HeaderButton
-          icon="info circle"
-          onClick={() => this.props.drawer === 'INFO' ? this.props.hideDrawer() : this.props.openInfoDrawer()}
+          onClick={() => this.props.drawer === 'MAP' ? this.props.hideDrawer() : this.props.openMapDrawer()}
         />
         <h1 style={{margin: '15px'}}>{ text.liefbase }</h1>
       </div>

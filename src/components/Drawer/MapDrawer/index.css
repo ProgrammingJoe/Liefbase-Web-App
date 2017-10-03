@@ -1,0 +1,11 @@
+.label {
+  margin-top: 1rem;
+}
+
+.content {
+  margin-top: 0.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
