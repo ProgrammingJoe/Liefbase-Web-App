@@ -143,8 +143,6 @@ export default class MapContainer extends Component {
           </LayersControl.BaseLayer>
 
           { templates.map(template => {
-              console.log(template.mapItems);
-
               return <LayersControl.Overlay key={template.id} name={template.name} checked>
                 <GeoJSON
                   data={template.mapItems}

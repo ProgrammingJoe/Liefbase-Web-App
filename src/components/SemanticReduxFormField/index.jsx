@@ -17,6 +17,7 @@ export default class SemanticReduxFormField extends React.Component {
   render() {
     const {
       input,
+      value,
       meta: { touched, error},
       as: As = Input,
       ...passThrough

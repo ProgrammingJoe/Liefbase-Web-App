@@ -1,10 +1,10 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Dropdown, Icon } from 'semantic-ui-react';
+import { Button, Dropdown, Icon } from 'semantic-ui-react';
 
 import actions from '../../../redux/entities/actionCreators';
-import { showUpdateMap } from '../../../redux/ui/modal';
+import { showUpdateMap, showCreateMapItemTemplate } from '../../../redux/ui/modal';
 import { selectMap } from '../../../redux/ui/map';
 
 import DrawerWrapper from '../DrawerWrapper';
@@ -17,13 +17,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getMap: async values => {
+  getMap: values => {
     // todo: polyfill for URLSearchParams?
     const params = new URLSearchParams();
     params.append('include[]', 'mapItemTemplates.*');
     params.append('include[]', 'mapItemTemplates.mapItems.*');
 
-    return await dispatch(actions.reliefMap.get({
+    return dispatch(actions.reliefMap.get({
       values,
       params,
     }));
@@ -32,10 +32,11 @@ const mapDispatchToProps = (dispatch) => ({
   selectMap: map => dispatch(selectMap(map)),
   destroyMap: values => dispatch(actions.reliefMap.destroy({ values })),
   updateMap: map => dispatch(showUpdateMap(map)),
+  onClickCreateTemplate: () => dispatch(showCreateMapItemTemplate()),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class SearchDrawer extends Component {
+export default class MapDrawer extends Component {
   static propTypes = {
     // mapStateToProps
     maps: PropTypes.object,
@@ -46,12 +47,16 @@ export default class SearchDrawer extends Component {
     selectMap: PropTypes.func,
     destroyMap: PropTypes.func,
     updateMap: PropTypes.func,
+    onClickCreateTemplate: PropTypes.func,
   };
 
   componentWillMount = () => this.props.listMaps()
 
-  handleChange = (e, data) => {
-    this.props.selectMap(data.value);
+  handleChange = async (e, data) => {
+    const mapId = data.value;
+    const map = this.props.maps[mapId];
+    await this.props.getMap(map);
+    this.props.selectMap(map);
   }
 
   render() {
@@ -69,7 +74,7 @@ export default class SearchDrawer extends Component {
         return m1.id > m2.id;
       });
 
-    const options = maps.map(m => ({ key: m.id, value: m, text: m.name }));
+    const options = maps.map(m => ({ value: m.id, text: m.name }));
     const selectedMap = this.props.maps[this.props.selectedMapId];
 
     return (
@@ -85,36 +90,42 @@ export default class SearchDrawer extends Component {
               fluid
               search
               selection
-              value={selectedMap}
             />
           </div>
           {
             selectedMap &&
-              <div className={css.label}>
-                <label>Manage Map</label>
-                <div className={css.content}>
-                  <Icon
-                    className={css.clickable}
-                    name='edit'
-                    color='blue'
-                    size='big'
-                    onClick={e => {
-                      e.stopPropagation();
-                      this.props.updateMap(selectedMap);
-                    }}
-                  />
-                  <Icon
-                    className={css.clickable}
-                    name='delete'
-                    color='red'
-                    size='big'
-                    onClick={e => {
-                      e.stopPropagation();
-                      this.props.destroyMap(selectedMap);
-                    }}
-                  />
+                <div className={css.label}>
+                  <label>Manage Map</label>
+                  <div className={css.content}>
+                    <Button
+
+                      onClick={() => this.props.onClickCreateTemplate()}
+                      color="green"
+                    ><Icon name="add" />New Template</Button>
+                  </div>
+                  <div className={css.content}>
+                    <Icon
+                      className={css.clickable}
+                      name='edit'
+                      color='blue'
+                      size='big'
+                      onClick={e => {
+                        e.stopPropagation();
+                        this.props.updateMap(selectedMap);
+                      }}
+                    />
+                    <Icon
+                      className={css.clickable}
+                      name='delete'
+                      color='red'
+                      size='big'
+                      onClick={e => {
+                        e.stopPropagation();
+                        this.props.destroyMap(selectedMap);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
           }
         </div>
       </DrawerWrapper>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { showSignIn, showRegister, showCreateMap, showCreateMapItemTemplate } from '../../redux/ui/modal';
+import { showSignIn, showRegister, showCreateMap } from '../../redux/ui/modal';
 import { showMap, hideDrawer } from '../../redux/ui/drawer';
 import {
   signOut,
@@ -20,7 +20,6 @@ const text = {
   signOut: 'Log out',
   register: 'Sign up',
   createMap: 'New Map',
-  createTemplate: 'New Template'
 };
 
 const mapStateToProps = state => {
@@ -42,7 +41,6 @@ const mapDispatchToProps = (dispatch) => ({
   onClickSignIn: () => dispatch(showSignIn()),
   onClickRegister: () => dispatch(showRegister()),
   onClickCreateMap: () => dispatch(showCreateMap()),
-  onClickCreateTemplate: () => dispatch(showCreateMapItemTemplate()),
   onClickSignOut: () => dispatch(signOut()),
   openMapDrawer: () => dispatch(showMap()),
   hideDrawer: () => dispatch(hideDrawer()),
@@ -63,7 +61,6 @@ export default class Header extends Component {
     onClickRegister: PropTypes.func,
     onClickSignOut: PropTypes.func,
     onClickCreateMap: PropTypes.func,
-    onClickCreateTemplate: PropTypes.func,
 
     // Drawers
     drawer: PropTypes.string,
@@ -84,12 +81,6 @@ export default class Header extends Component {
         onClick={() => this.props.onClickCreateMap()}
         color="blue"
       ><Icon name="add" />{text.createMap}</Button>
-      { this.props.currentMap &&
-          <Button
-            onClick={() => this.props.onClickCreateTemplate()}
-            color="green"
-          ><Icon name="add" />{text.createTemplate}</Button>
-      }
       <div className={css.dropdownContainer}>
         <Dropdown pointing="top right" icon={<Icon name="sidebar" size="big" />}>
           <Dropdown.Menu>
