@@ -38,17 +38,16 @@ export default class ContentContainer extends Component {
       <div className={css.contentContainer}>
         <Sidebar.Pushable as={Segment} style={segmentStyle}>
           {
-            drawerTypes.map(d => {
-              console.log(d);
-              return (<Sidebar
+            drawerTypes.map(d =>
+              <Sidebar
                 key={d}
                 animation='slide along'
                 visible={activeDrawer === d}
                 className={css.sidebar}
               >
                 {content[d]}
-              </Sidebar>);
-            })
+              </Sidebar>
+            )
           }
           <Sidebar.Pusher>
             <div className={css.mapContent}>

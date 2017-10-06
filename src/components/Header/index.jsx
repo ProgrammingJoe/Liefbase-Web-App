@@ -10,20 +10,9 @@ import {
 
 import { Menu } from 'semantic-ui-react';
 
-const mapStateToProps = state => {
-  const userId = state.authorization.currentUserId;
-  const currentUser = state.entities.user[userId];
-
-  const mapId = state.ui.map.selectedMapId;
-  const currentMap = state.entities.reliefMap[mapId];
-
-  return {
-    currentUser,
-    currentMap,
-    modal: state.ui.modal,
-    drawer: state.ui.drawer.drawerType,
-  };
-};
+const mapStateToProps = state => ({
+  isCurrentUser: Boolean(state.authorization.currentUserId),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   onClickSignIn: () => dispatch(showSignIn()),
@@ -35,13 +24,10 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Header extends Component {
   static propTypes = {
-    currentUser: PropTypes.shape({
-      firstName: PropTypes.string,
-      email: PropTypes.string,
-    }),
-    currentMap: PropTypes.object,
+    // mapStateToProps
+    isCurrentUser: PropTypes.bool,
 
-    // Buttons
+    // mapDispatchToProps
     onClickSignIn: PropTypes.func,
     onClickRegister: PropTypes.func,
     onClickSignOut: PropTypes.func,
@@ -52,30 +38,22 @@ export default class Header extends Component {
     this.props.refreshSession();
   }
 
-  renderLoggedIn = () =>
-    <Menu style={{ margin: 0 }}>
-      <Menu.Item
-        position='right'
-        onClick={this.props.onClickSignOut}
-      >
-       Log Out
-      </Menu.Item>
-    </Menu>
-
-  renderLoggedOut = () =>
+  render = () =>
     <Menu style={{ margin: 0 }}>
       <Menu.Menu position='right'>
-        <Menu.Item onClick={this.props.onClickSignIn}>
-         Log In
-        </Menu.Item>
-        <Menu.Item onClick={this.props.onClickRegister}>
-         Register
-        </Menu.Item>
+        {
+          this.props.isCurrentUser ?
+            <Menu.Item onClick={this.props.onClickSignOut}>
+             Log Out
+            </Menu.Item>
+          :
+            [<Menu.Item key='login' onClick={this.props.onClickSignIn}>
+             Log In
+            </Menu.Item>,
+            <Menu.Item key='register' onClick={this.props.onClickRegister}>
+             Register
+            </Menu.Item>]
+        }
       </Menu.Menu>
     </Menu>
-
-  render = () => {
-    return this.props.currentUser ?
-      this.renderLoggedIn() : this.renderLoggedOut();
-  }
 }
