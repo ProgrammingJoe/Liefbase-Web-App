@@ -14,8 +14,8 @@ export default () => (
   <Provider store={store}>
     <div>
       <ModalContainer />
-      <Header />
       <SidebarMenu />
+      <Header />
       <ContentContainer />
     </div>
   </Provider>

@@ -1,5 +1,5 @@
 .label {
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .content {
@@ -8,4 +8,18 @@
 
 .clickable {
   cursor: pointer;
+}
+
+.warningText {
+  color: orange;
+}
+
+.dangerText {
+  color: red;
+}
+
+.safeText {
+  color: green;
+  cursor: pointer;
+  margin-top: 0.5rem;
 }

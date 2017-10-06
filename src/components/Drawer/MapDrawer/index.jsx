@@ -49,6 +49,10 @@ export default class MapDrawer extends Component {
     onClickCreateMap: PropTypes.func,
   };
 
+  state = {
+    deleteActive: false,
+  }
+
   componentWillMount = () => this.props.listMaps()
 
   handleChange = async (e, data) => {
@@ -78,7 +82,7 @@ export default class MapDrawer extends Component {
 
     return (
         <div>
-          <div className={css.label}>
+          <div>
             <label>Selected Map</label>
             <Dropdown
               className={css.content}
@@ -104,10 +108,14 @@ export default class MapDrawer extends Component {
                 <div className={css.label}>
                   <label>Manage Map</label>
                   <div className={css.content}>
-                    <Button
+                    <Icon
+                      className={css.clickable}
+                      name='add'
+                      color='green'
+                      size='big'
                       onClick={this.props.onClickCreateTemplate}
-                      color="green"
-                    ><Icon name="add" />New Template</Button>
+                    />
+                    <span>Add Template</span>
                   </div>
                   <div className={css.content}>
                     <Icon
@@ -115,22 +123,44 @@ export default class MapDrawer extends Component {
                       name='edit'
                       color='blue'
                       size='big'
-                      onClick={e => {
-                        e.stopPropagation();
-                        this.props.updateMap(selectedMap);
-                      }}
+                      onClick={() => this.props.updateMap(selectedMap)}
                     />
-                    <Icon
-                      className={css.clickable}
-                      name='delete'
-                      color='red'
-                      size='big'
-                      onClick={e => {
-                        e.stopPropagation();
-                        this.props.destroyMap(selectedMap);
-                      }}
-                    />
+                    <span>Edit Details</span>
                   </div>
+                  {
+                    this.state.deleteActive ?
+                      <div className={css.content}>
+                        <Icon
+                          className={css.clickable}
+                          name='remove circle'
+                          color='red'
+                          size='big'
+                          onClick={() => this.props.destroyMap(selectedMap)}
+                        />
+                        <span className={css.dangerText}>Permanantly Delete Map?</span>
+                        <p className={css.safeText}>
+                          <Icon
+                            className={css.clickable}
+                            name='undo'
+                            color='green'
+                            size='big'
+                            onClick={() => this.setState({ deleteActive: false })}
+                          />
+                          Don't Delete Map!
+                        </p>
+                      </div>
+                    :
+                      <div className={css.content}>
+                        <Icon
+                          className={css.clickable}
+                          name='warning circle'
+                          color='orange'
+                          size='big'
+                          onClick={() => this.setState({ deleteActive: true })}
+                        />
+                        <span className={css.warningText}>Delete Map?</span>
+                      </div>
+                  }
                 </div>
           }
         </div>
