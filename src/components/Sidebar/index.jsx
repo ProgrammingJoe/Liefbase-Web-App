@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Sidebar, Icon, Menu, Dropdown } from 'semantic-ui-react';
+import { Sidebar, Icon, Menu } from 'semantic-ui-react';
 
 import {
   hideDrawer,

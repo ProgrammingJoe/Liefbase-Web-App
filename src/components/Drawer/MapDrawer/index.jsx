@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Dropdown, Icon } from 'semantic-ui-react';
 
 import actions from '../../../redux/entities/actionCreators';
-import { showUpdateMap, showCreateMapItemTemplate } from '../../../redux/ui/modal';
+import { showUpdateMap, showCreateMapItemTemplate, showCreateMap } from '../../../redux/ui/modal';
 import { selectMap } from '../../../redux/ui/map';
 
 import css from './index.css';
@@ -16,7 +16,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getMap: values => {
-    // todo: polyfill for URLSearchParams?
     const params = new URLSearchParams();
     params.append('include[]', 'mapItemTemplates.*');
     params.append('include[]', 'mapItemTemplates.mapItems.*');
@@ -31,6 +30,7 @@ const mapDispatchToProps = (dispatch) => ({
   destroyMap: values => dispatch(actions.reliefMap.destroy({ values })),
   updateMap: map => dispatch(showUpdateMap(map)),
   onClickCreateTemplate: () => dispatch(showCreateMapItemTemplate()),
+  onClickCreateMap: () => dispatch(showCreateMap()),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -46,6 +46,7 @@ export default class MapDrawer extends Component {
     destroyMap: PropTypes.func,
     updateMap: PropTypes.func,
     onClickCreateTemplate: PropTypes.func,
+    onClickCreateMap: PropTypes.func,
   };
 
   componentWillMount = () => this.props.listMaps()
@@ -90,14 +91,21 @@ export default class MapDrawer extends Component {
               selection
             />
           </div>
+          <div className={css.content}>
+            <Button
+              onClick={this.props.onClickCreateMap}
+              color="blue"
+            >
+              <Icon name="add" />New Map
+            </Button>
+          </div>
           {
             selectedMap &&
                 <div className={css.label}>
                   <label>Manage Map</label>
                   <div className={css.content}>
                     <Button
-
-                      onClick={() => this.props.onClickCreateTemplate()}
+                      onClick={this.props.onClickCreateTemplate}
                       color="green"
                     ><Icon name="add" />New Template</Button>
                   </div>

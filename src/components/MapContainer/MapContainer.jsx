@@ -73,7 +73,7 @@ export default class MapContainer extends Component {
     const id = e.target.feature.id;
     const { lat, lng } = e.target.getLatLng();
 
-    const newValues = {
+    const values = {
       id,
       // added for proper drf geojson serialization
       properties: {},
@@ -84,7 +84,7 @@ export default class MapContainer extends Component {
     };
 
     try {
-      await this.props.updateMapItem(newValues);
+      await this.props.updateMapItem({ values });
     } catch(err) {
       const oldGeometry = e.target.feature.geometry.coordinates;
       e.target.setLatLng(oldGeometry);
@@ -96,10 +96,6 @@ export default class MapContainer extends Component {
   handleCreate = e => {
     this.props.showCreateMapItem(e.layer.getLatLng());
     e.layer.remove();
-
-    // todo:
-    //   -update the appropriate geojson layer on success (note data is not a dynamic prop so we need to figure out how to reconstruct child?)
-    //   -display message on failure?
   }
 
   render() {
@@ -141,19 +137,21 @@ export default class MapContainer extends Component {
               attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
             />
           </LayersControl.BaseLayer>
-
-          { templates.map(template => {
-              return <LayersControl.Overlay key={template.id} name={template.name} checked>
-                <GeoJSON
-                  data={template.mapItems}
-                  onEachFeature={(feature, layer) => {
-                    layer.on('dragend', this.handleMarkerDragEnd);
-
-                    // todo: only dragable if member or admin of this map.
-                    layer.options.draggable = true;
-                  }}
-                />
-              </LayersControl.Overlay>;
+          {
+            templates.map(template => {
+              const key = `${template.id}:${template.mapItems.length}`;
+              return (
+                <LayersControl.Overlay key={key} name={template.name} checked>
+                  <GeoJSON
+                    data={template.mapItems}
+                    onEachFeature={(feature, layer) => {
+                      layer.on('dragend', this.handleMarkerDragEnd);
+                      // todo: only dragable if member or admin of this map.
+                      layer.options.draggable = true;
+                    }}
+                  />
+                </LayersControl.Overlay>
+              );
             })
           }
 

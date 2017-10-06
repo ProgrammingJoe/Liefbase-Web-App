@@ -10,7 +10,6 @@ import schemas from '../../../../schema';
 
 import {
   Button,
-  Dropdown,
   Form,
 } from 'semantic-ui-react';
 
@@ -94,39 +93,37 @@ export default class MapItemForm extends Component {
   handleSubmit = async (values, dispatch) => {
     const id = this.props.id;
 
-    console.log(values);
+    const newValues = {
+      id,
+      type: "Feature",
+      geometry: {
+        type: "Point",
+      },
+      properties: values,
+    };
 
-    // todo: handle submitting the update/create map item
+    // creation
+    const params = new URLSearchParams();
+    if (!id) {
+      const { lng, lat } = this.props.entity;
+      newValues.geometry.coordinates = [lng, lat];
+      params.append('include[]', 'mapItemTemplate.*');
+    }
 
-    // const newValues = {
-    //   id,
-    //   type: "Feature",
-    //   geometry: {
-    //     type: "Point",
-    //   },
-    //   properties: values,
-    // };
+    const action = id ? actions.mapItem.update : actions.mapItem.create;
 
-    // // creation
-    // if (!id) {
-    //   const { lng, lat } = this.props.entity;
-    //   newValues.geometry.coordinates = [lng, lat];
-    // }
+    try {
+      await dispatch(action({ params, values: newValues }));
+      dispatch(hideModal());
+    } catch (err) {
+      const errors = {};
 
-    // const action = id ? actions.mapItem.update : actions.mapItem.create;
+      if (err.response) {
+        Object.keys(err.response.data).forEach(k => errors[k] = err.response.data[k].join('\n'));
+      }
 
-    // try {
-    //   await dispatch(action(newValues));
-    //   dispatch(hideModal());
-    // } catch (err) {
-    //   const errors = {};
-
-    //   if (err.response) {
-    //     Object.keys(err.response.data).forEach(k => errors[k] = err.response.data[k].join('\n'));
-    //   }
-
-    //   throw new SubmissionError({ ...errors, _error: 'Map request failed.' });
-    // }
+      throw new SubmissionError({ ...errors, _error: 'Map request failed.' });
+    }
   }
 
   render = () => {
