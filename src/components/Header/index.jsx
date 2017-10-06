@@ -2,25 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { showSignIn, showRegister, showCreateMap } from '../../redux/ui/modal';
-import { showMap, hideDrawer } from '../../redux/ui/drawer';
+import { showSignIn, showRegister } from '../../redux/ui/modal';
 import {
   signOut,
   refresh as refreshSession
 } from '../../redux/authorization';
 
-import { Button, Dropdown, Icon } from 'semantic-ui-react';
-import HeaderButton from './HeaderButton';
-
-import css from './index.css';
-
-const text = {
-  liefbase: 'liefbase',
-  signIn: 'Log In',
-  signOut: 'Log out',
-  register: 'Sign up',
-  createMap: 'New Map',
-};
+import { Menu } from 'semantic-ui-react';
 
 const mapStateToProps = state => {
   const userId = state.authorization.currentUserId;
@@ -40,10 +28,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
   onClickSignIn: () => dispatch(showSignIn()),
   onClickRegister: () => dispatch(showRegister()),
-  onClickCreateMap: () => dispatch(showCreateMap()),
   onClickSignOut: () => dispatch(signOut()),
-  openMapDrawer: () => dispatch(showMap()),
-  hideDrawer: () => dispatch(hideDrawer()),
   refreshSession: () => dispatch(refreshSession()),
 });
 
@@ -60,13 +45,6 @@ export default class Header extends Component {
     onClickSignIn: PropTypes.func,
     onClickRegister: PropTypes.func,
     onClickSignOut: PropTypes.func,
-    onClickCreateMap: PropTypes.func,
-
-    // Drawers
-    drawer: PropTypes.string,
-    hideDrawer: PropTypes.func,
-    openMapDrawer: PropTypes.func,
-
     refreshSession: PropTypes.func,
   };
 
@@ -75,43 +53,25 @@ export default class Header extends Component {
   }
 
   renderLoggedIn = () =>
-    <div className={css.headerSection}>
-      <h4 className={css.email}>{ `Welcome ${this.props.currentUser.firstName}!`}</h4>
-      <Button
-        onClick={() => this.props.onClickCreateMap()}
-        color="blue"
-      ><Icon name="add" />{text.createMap}</Button>
-      <div className={css.dropdownContainer}>
-        <Dropdown pointing="top right" icon={<Icon name="sidebar" size="big" />}>
-          <Dropdown.Menu>
-            <Dropdown.Item text='Settings' />
-            <Dropdown.Divider />
-            <Dropdown.Item text='Sign Out' onClick={this.props.onClickSignOut} />
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-    </div>
+    <Menu style={{ margin: 0 }}>
+      <Menu.Menu position='right'>
+        <Menu.Item onClick={this.props.onClickSignIn}>
+         Log Out
+        </Menu.Item>
+      </Menu.Menu>
+    </Menu>;
 
   renderLoggedOut = () =>
-    <div>
-      <Button onClick={() => this.props.onClickSignIn()}>
-        { text.signIn }
-      </Button>
-      <Button onClick={() => this.props.onClickRegister()} color="blue">
-        { text.register }
-      </Button>
-    </div>
+    <Menu style={{ margin: 0 }}>
+      <Menu.Menu position='right'>
+        <Menu.Item onClick={this.props.onClickSignIn}>
+         Log In
+        </Menu.Item>
+        <Menu.Item onClick={this.props.onClickRegister}>
+         Register
+        </Menu.Item>
+      </Menu.Menu>
+    </Menu>;
 
-  render = () =>
-    <div className={css.header}>
-      <div className={css.headerSection}>
-        <HeaderButton
-          icon="map outline"
-          onClick={() => this.props.drawer === 'MAP' ? this.props.hideDrawer() : this.props.openMapDrawer()}
-        />
-        <h1 style={{margin: '15px'}}>{ text.liefbase }</h1>
-      </div>
-      { this.props.currentMap && <h3 style={{ margin: '0' }}>{this.props.currentMap.name}</h3> }
-      { this.props.currentUser ? this.renderLoggedIn() : this.renderLoggedOut() }
-    </div>
+  render = () => this.props.currentUser ? this.renderLoggedIn() : this.renderLoggedOut();
 }

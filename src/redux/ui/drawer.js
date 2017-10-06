@@ -1,8 +1,19 @@
 const HIDE_DRAWER = 'HIDE_DRAWER';
-const SHOW_MAP_DRAWER = 'SHOW_MAP_DRAWER';
+const SHOW_DRAWER = 'SHOW_DRAWER';
 
-export const showMap = () => ({
-  type: SHOW_MAP_DRAWER,
+export const showMaps = () => ({
+  type: SHOW_DRAWER,
+  drawer: 'maps',
+});
+
+export const showOrganizations = () => ({
+  type: SHOW_DRAWER,
+  drawer: 'organizations'
+});
+
+export const showSettings = () => ({
+  type: SHOW_DRAWER,
+  drawer: 'settings',
 });
 
 export const hideDrawer = () => ({
@@ -10,7 +21,7 @@ export const hideDrawer = () => ({
 });
 
 const initialState = {
-  drawerType: null,
+  activeDrawer: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -18,10 +29,10 @@ export default function reducer(state = initialState, action) {
   case HIDE_DRAWER:
     return initialState;
 
-  case SHOW_MAP_DRAWER:
+  case SHOW_DRAWER:
     return {
       ...state,
-      drawerType: 'MAP',
+      activeDrawer: action.drawer,
     };
   }
 

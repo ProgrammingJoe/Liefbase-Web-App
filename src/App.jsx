@@ -1,28 +1,22 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 
 import Header from './components/Header';
+import SidebarMenu from './components/Sidebar';
 import ModalContainer from './components/Modal';
-import DrawerContainer from './components/Drawer';
-import MapContainer from './components/MapContainer';
+import ContentContainer from './components/ContentContainer';
 
-import { Provider } from 'react-redux';
 import configureStore from './redux/configureStore';
-
-import css from './App.css';
 
 let store = configureStore();
 
 export default () => (
   <Provider store={store}>
-    <div className={css.app}>
+    <div>
       <ModalContainer />
-      <div className={css.appPage}>
-        <Header />
-        <div className={css.contentContainer}>
-          <DrawerContainer />
-          <MapContainer />
-        </div>
-      </div>
+      <Header />
+      <SidebarMenu />
+      <ContentContainer />
     </div>
   </Provider>
 );

@@ -1,0 +1,11 @@
+.menuStyle {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #2159F9
+}
+
+.lastTopMenu {
+  border-bottom: solid 1px rgba(255, 255, 255, 0.08);
+  margin-bottom: auto;
+}

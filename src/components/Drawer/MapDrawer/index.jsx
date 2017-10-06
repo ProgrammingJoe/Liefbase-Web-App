@@ -7,8 +7,6 @@ import actions from '../../../redux/entities/actionCreators';
 import { showUpdateMap, showCreateMapItemTemplate } from '../../../redux/ui/modal';
 import { selectMap } from '../../../redux/ui/map';
 
-import DrawerWrapper from '../DrawerWrapper';
-
 import css from './index.css';
 
 const mapStateToProps = state => ({
@@ -78,7 +76,6 @@ export default class MapDrawer extends Component {
     const selectedMap = this.props.maps[this.props.selectedMapId];
 
     return (
-      <DrawerWrapper { ...this.props }>
         <div>
           <div className={css.label}>
             <label>Selected Map</label>
@@ -129,37 +126,6 @@ export default class MapDrawer extends Component {
                 </div>
           }
         </div>
-      </DrawerWrapper>
     );
   }
 }
-
-/*
-<Menu vertical style={styles.menu}>
-{
-  maps.filter((map) => map.name.toLowerCase().includes(
-    this.props.searchText.toLowerCase())
-  ).map((map) =>
-    <div key={map.id}>
-      <Menu.Item
-        name={map.name}
-        onClick={ async () => {
-          await this.props.getMap(map);
-          this.props.selectMap(map);
-        }}
-        active={ map.id === this.props.selectedMapId }
-        style={{ display: 'flex', wordBreak: 'break-all' }}
-      >
-        {map.name}
-        {
-          !map.public && // todo: check if current user is admin of map for these buttons
-            <div style={{ marginLeft: 'auto' }}>
-
-            </div>
-        }
-      </Menu.Item>
-    </div>
-  )
-}
-</Menu>
-*/

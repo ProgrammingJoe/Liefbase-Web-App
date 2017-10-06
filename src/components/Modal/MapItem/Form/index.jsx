@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { reduxForm, formValueSelector, Field, SubmissionError } from 'redux-form';
 import { denormalize } from 'normalizr';
 
 import { hideModal } from '../../../../redux/ui/modal';
@@ -49,6 +49,10 @@ const mapStateToProps = state => {
 
   const entity = state.ui.modal.entity;
 
+  const templateId = formValueSelector(FORM_NAME)(state, 'mapItemTemplate');
+
+  const selectedTemplate = state.entities.mapItemTemplate[templateId];
+
   return {
     id,
     entity,
@@ -56,7 +60,8 @@ const mapStateToProps = state => {
     initialValues: {
       mapItemTemplate,
       quantity,
-    }
+    },
+    selectedTemplate,
   };
 };
 
@@ -68,6 +73,7 @@ export default class MapItemForm extends Component {
     id: PropTypes.number, // populated if update
     entity: PropTypes.object, // populated if create
     templates: PropTypes.array,
+    selectedTemplate: PropTypes.object,
 
 
     // redux-form
@@ -124,66 +130,24 @@ export default class MapItemForm extends Component {
   }
 
   render = () => {
-    let { templates: templateOptions } = this.props;
-
-    const uniqueCategories = {};
-    templateOptions.forEach(t => { uniqueCategories[t.category] = true; });
-    const categoryOptions = Object.keys(uniqueCategories).map(c => ({ value: c, text: c }));
-
-    if (this.state.category) {
-      templateOptions = templateOptions.filter(t => t.category === this.state.category);
-    }
-
-    const uniqueSubCategories = {};
-    templateOptions.forEach(t => { uniqueSubCategories[t.subCategory] = true; });
-    let subCategoryOptions = Object.keys(uniqueSubCategories).map(sc => ({ value: sc, text: sc }));
-
-    if (this.state.subCategory) {
-      templateOptions = templateOptions.filter(t => t.subCategory === this.state.subCategory);
-    }
-
-    templateOptions = templateOptions.map(t => ({ value: t.id, text: t.name }));
+    const templateOptions = this.props.templates.map(t => ({ value: t.id, text: t.name }));
 
     return (
       <Form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-        <Form.Group widths="equal">
-          <Form.Field>
-            <label>Category</label>
-            <Dropdown
-              placeholder="Resource"
-              options={categoryOptions}
-              onChange={(e, d) => this.setState({ category: d.value, subCategory: null })}
-              fluid
-              search
-              selection
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Sub-Category</label>
-            <Dropdown
-              placeholder="Medical"
-              options={subCategoryOptions}
-              onChange={(e, d) => this.setState({ subCategory: d.value })}
-              fluid
-              search
-              selection
-            />
-          </Form.Field>
-          <Form.Field>
-            <Field
-              component={SemanticUiField}
-              as={Form.Dropdown}
-              name="mapItemTemplate"
-              placeholder="Vaccines"
-              label="Template"
-              options={templateOptions}
-              onChange={this.handleChange}
-              fluid
-              search
-              selection
-            />
-          </Form.Field>
-        </Form.Group>
+        <Form.Field>
+          <Field
+            component={SemanticUiField}
+            as={Form.Dropdown}
+            name="mapItemTemplate"
+            placeholder="Vaccines"
+            label="Template"
+            options={templateOptions}
+            onChange={this.handleChange}
+            fluid
+            search
+            selection
+          />
+        </Form.Field>
         <Form.Field>
           <Field
             component={SemanticUiField}

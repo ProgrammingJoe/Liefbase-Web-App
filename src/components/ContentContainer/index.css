@@ -1,0 +1,14 @@
+.contentContainer {
+  position: absolute;
+  left: 84px;
+  width: 100%;
+}
+
+.mapContent {
+  height: 100vh;
+}
+
+.sidebar {
+  padding: 1em;
+  background-color: #D8D8D8;
+}

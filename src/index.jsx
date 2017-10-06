@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 
 
 render(
-    <App />,
+  <App />,
   document.getElementById('root')
 );
 /* registerServiceWorker();*/

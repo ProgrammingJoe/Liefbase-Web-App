@@ -111,12 +111,12 @@ export default class MapContainer extends Component {
         animate
         useFlyTo
         ref={m => this.leafletMap = m}
-        style={{ width: '100%' }}
+        style={{ height: '100%', width: '100%' }}
         zoomControl={false}
       >
-        <ScaleControl position="bottomright" />
-        <ZoomControl position="bottomright" />
-        <LayersControl position='topright'>
+        <ScaleControl position="bottomleft" />
+        <ZoomControl position="bottomleft" />
+        <LayersControl position='topleft'>
           <LayersControl.BaseLayer name='OpenStreetMap' checked>
             <TileLayer
               url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -161,7 +161,7 @@ export default class MapContainer extends Component {
         {/* todo: only display this if member or admin of map */}
         <FeatureGroup>
           <EditControl
-            position='topright'
+            position='topleft'
             onCreated={this.handleCreate}
             draw={{
               circle: false,
