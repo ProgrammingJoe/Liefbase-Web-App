@@ -5,22 +5,19 @@ import { Sidebar, Icon, Menu } from 'semantic-ui-react';
 
 import {
   hideDrawer,
-  showMaps,
-  showOrganizations,
-  showSettings,
+  showDrawer,
 } from '../../redux/ui/drawer';
 
 import css from './index.css';
 
 const mapStateToProps = state => ({
+  isCurrentUser: Boolean(state.authorization.currentUserId),
   activeDrawer: state.ui.drawer.activeDrawer,
 });
 
 const mapDispatchToProps = dispatch => ({
   hideDrawer: () => dispatch(hideDrawer()),
-  showMaps: () => dispatch(showMaps()),
-  showOrganizations: () => dispatch(showOrganizations()),
-  showSettings: () => dispatch(showSettings()),
+  showDrawer: drawer => dispatch(showDrawer(drawer)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -28,32 +25,18 @@ export default class MenuSidebar extends React.Component {
   static propTypes = {
     // mapStateToProps
     activeDrawer: PropTypes.string,
+    isCurrentUser: PropTypes.bool,
 
     // mapDispatchToProps
     hideDrawer: PropTypes.func,
-    showMaps: PropTypes.func,
-    showOrganizations: PropTypes.func,
-    showSettings: PropTypes.func,
+    showDrawer: PropTypes.func,
   }
 
   handleClick = (e, { name }) => {
     if (name === this.props.activeDrawer) {
       this.props.hideDrawer();
-      return;
-    }
-
-    switch (name) {
-    case 'maps':
-      this.props.showMaps();
-      break;
-    case 'organizations':
-      this.props.showOrganizations();
-      break;
-    case 'settings':
-      this.props.showSettings();
-      break;
-    default:
-      this.props.hideDrawer();
+    } else {
+      this.props.showDrawer(name);
     }
   }
 
@@ -70,27 +53,41 @@ export default class MenuSidebar extends React.Component {
           liefbase
         </Menu.Item>
         <Menu.Item
+          className={this.props.isCurrentUser ? '' : css.lastTopMenu}
           name='maps'
           onClick={this.handleClick}
           active={this.props.activeDrawer === 'maps'}
         >
           <Icon name='map outline' />
         </Menu.Item>
-        <Menu.Item
-          name='organizations'
-          className={css.lastTopMenu}
-          onClick={this.handleClick}
-          active={this.props.activeDrawer === 'organizations'}
-        >
-          <Icon name='building outline' />
-        </Menu.Item>
-        <Menu.Item
-          name='settings'
-          onClick={this.handleClick}
-          active={this.props.activeDrawer === 'settings'}
-        >
-          <Icon name='options' />
-        </Menu.Item>
+        {
+          this.props.isCurrentUser &&
+            [<Menu.Item
+              key='organizations'
+              name='organizations'
+              onClick={this.handleClick}
+              active={this.props.activeDrawer === 'organizations'}
+            >
+              <Icon name='building outline' />
+            </Menu.Item>,
+            <Menu.Item
+              key='teams'
+              name='teams'
+              className={css.lastTopMenu}
+              onClick={this.handleClick}
+              active={this.props.activeDrawer === 'teams'}
+            >
+              <Icon name='users' />
+            </Menu.Item>,
+            <Menu.Item
+              key='settings'
+              name='settings'
+              onClick={this.handleClick}
+              active={this.props.activeDrawer === 'settings'}
+            >
+              <Icon name='options' />
+            </Menu.Item>]
+        }
       </div>
     </Sidebar>
 }

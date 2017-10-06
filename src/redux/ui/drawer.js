@@ -1,19 +1,16 @@
 const HIDE_DRAWER = 'HIDE_DRAWER';
 const SHOW_DRAWER = 'SHOW_DRAWER';
 
-export const showMaps = () => ({
-  type: SHOW_DRAWER,
-  drawer: 'maps',
-});
+export const drawerTypes = [
+  'maps',
+  'organizations',
+  'teams',
+  'settings',
+];
 
-export const showOrganizations = () => ({
+export const showDrawer = drawer => ({
   type: SHOW_DRAWER,
-  drawer: 'organizations'
-});
-
-export const showSettings = () => ({
-  type: SHOW_DRAWER,
-  drawer: 'settings',
+  drawer,
 });
 
 export const hideDrawer = () => ({

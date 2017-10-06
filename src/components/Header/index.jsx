@@ -54,12 +54,13 @@ export default class Header extends Component {
 
   renderLoggedIn = () =>
     <Menu style={{ margin: 0 }}>
-      <Menu.Menu position='right'>
-        <Menu.Item onClick={this.props.onClickSignIn}>
-         Log Out
-        </Menu.Item>
-      </Menu.Menu>
-    </Menu>;
+      <Menu.Item
+        position='right'
+        onClick={this.props.onClickSignOut}
+      >
+       Log Out
+      </Menu.Item>
+    </Menu>
 
   renderLoggedOut = () =>
     <Menu style={{ margin: 0 }}>
@@ -71,7 +72,10 @@ export default class Header extends Component {
          Register
         </Menu.Item>
       </Menu.Menu>
-    </Menu>;
+    </Menu>
 
-  render = () => this.props.currentUser ? this.renderLoggedIn() : this.renderLoggedOut();
+  render = () => {
+    return this.props.currentUser ?
+      this.renderLoggedIn() : this.renderLoggedOut();
+  }
 }

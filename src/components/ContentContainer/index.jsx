@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Sidebar, Segment } from 'semantic-ui-react';
 
+import { drawerTypes } from '../../redux/ui/drawer';
+
 import MapDrawer from '../Drawer/MapDrawer';
 import MapContainer from '../MapContainer';
 import css from './index.css';
@@ -25,30 +27,29 @@ export default class ContentContainer extends Component {
   render() {
     const { activeDrawer } = this.props;
 
+    const content = {
+      maps: <MapDrawer />,
+      organizations: <div>ORGANIZATION CONTENT</div>,
+      teams: <div>TEAMS CONTENT</div>,
+      settings: <div>SETTINGS CONTENT</div>,
+    };
+
     return (
       <div className={css.contentContainer}>
         <Sidebar.Pushable as={Segment} style={segmentStyle}>
-          <Sidebar
-            animation='slide along'
-            visible={activeDrawer === 'maps'}
-            className={css.sidebar}
-          >
-            <MapDrawer />
-          </Sidebar>
-          <Sidebar
-            animation='slide along'
-            visible={activeDrawer === 'organizations'}
-            className={css.sidebar}
-          >
-            <div>ORGANIZATION CONTENT</div>
-          </Sidebar>
-          <Sidebar
-            animation='slide along'
-            visible={activeDrawer === 'settings'}
-            className={css.sidebar}
-          >
-            <div>SETTINGS CONTENT</div>
-          </Sidebar>
+          {
+            drawerTypes.map(d => {
+              console.log(d);
+              return (<Sidebar
+                key={d}
+                animation='slide along'
+                visible={activeDrawer === d}
+                className={css.sidebar}
+              >
+                {content[d]}
+              </Sidebar>);
+            })
+          }
           <Sidebar.Pusher>
             <div className={css.mapContent}>
               <MapContainer />

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import MapContainer from './MapContainer';
+import { showDrawer } from '../../redux/ui/drawer';
 
+import MapContainer from './MapContainer';
 import css from './MapContainer.css';
 
 const mapStateToProps = state => {
@@ -13,15 +14,31 @@ const mapStateToProps = state => {
   return { map };
 };
 
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => ({
+  showMapsDrawer: () => dispatch(showDrawer('maps')),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class Container extends Component {
   static propTypes = {
+    // mapStateToProps
     map: PropTypes.object,
+
+    // mapDispatchToProps
+    showMapsDrawer: PropTypes.func,
   };
 
   renderPlaceHolder = () =>
     <div className={css.placeHolderContainer}>
-      <p>No map selected</p>
+      <div>
+        <p>No map selected</p>
+        <a
+          className={css.showMapLink}
+          onClick={this.props.showMapsDrawer}
+        >
+          Create 🗺 ?
+        </a>
+      </div>
     </div>
 
   render() {
