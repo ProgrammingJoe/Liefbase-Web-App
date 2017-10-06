@@ -87,6 +87,7 @@ export default class MapDrawer extends Component {
               placeholder='Select a Map'
               options={options}
               onChange={this.handleChange}
+              defaultValue={selectedMap && selectedMap.id}
               fluid
               search
               selection
