@@ -33,7 +33,7 @@ export default class Container extends Component {
       <div>
         <p>No map selected</p>
         <a
-          className={css.showMapLink}
+          className={css.clickable}
           onClick={this.props.showMapsDrawer}
         >
           Create 🗺 ?

@@ -40,7 +40,8 @@ const mapItemForm = {
 const mapStateToProps = state => {
   const id = state.ui.modal.updateId;
   const mapItem = state.entities.mapItem[id] || {};
-  const { mapItemTemplate, quantity } = mapItem;
+  const { mapItemTemplate, properties = { } } = mapItem;
+  const quantity = properties.quantity;
 
   const mapId = state.ui.map.selectedMapId;
   const map = state.entities.reliefMap[mapId];
@@ -95,10 +96,6 @@ export default class MapItemForm extends Component {
 
     const newValues = {
       id,
-      type: "Feature",
-      geometry: {
-        type: "Point",
-      },
       properties: values,
     };
 
@@ -106,7 +103,13 @@ export default class MapItemForm extends Component {
     const params = new URLSearchParams();
     if (!id) {
       const { lng, lat } = this.props.entity;
-      newValues.geometry.coordinates = [lng, lat];
+
+      newValues.type = 'Feature';
+      newValues.geometry = {
+        type: 'Point',
+        coordinates: [lng, lat],
+      };
+
       params.append('include[]', 'mapItemTemplate.*');
     }
 
@@ -116,6 +119,7 @@ export default class MapItemForm extends Component {
       await dispatch(action({ params, values: newValues }));
       dispatch(hideModal());
     } catch (err) {
+      console.error(err);
       const errors = {};
 
       if (err.response) {
