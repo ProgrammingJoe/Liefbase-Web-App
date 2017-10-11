@@ -100,20 +100,20 @@ export default class MapItemForm extends Component {
     };
 
     // creation
-    const params = new URLSearchParams();
     if (!id) {
       const { lng, lat } = this.props.entity;
 
       newValues.type = 'Feature';
       newValues.geometry = {
         type: 'Point',
-        coordinates: [lng, lat],
+        coordinates: [lat, lng],
       };
-
-      params.append('include[]', 'mapItemTemplate.*');
     }
 
     const action = id ? actions.mapItem.update : actions.mapItem.create;
+
+    const params = new URLSearchParams();
+    params.append('include[]', 'mapItemTemplate.*');
 
     try {
       await dispatch(action({ params, values: newValues }));

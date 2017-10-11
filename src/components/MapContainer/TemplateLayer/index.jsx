@@ -37,7 +37,10 @@ export default class TemplateLayer extends Component {
         checked
       >
         <LayerGroup>
-          { template.mapItems.map(feature => <MapItem key={feature.id} feature={feature} />) }
+          {
+            // todo: remove the filter once it is filtered out by reselect selector.
+            template.mapItems.filter(Boolean).map(feature => <MapItem key={feature.id} feature={feature} />)
+          }
         </LayerGroup>
       </LayersControl.Overlay>
     );
