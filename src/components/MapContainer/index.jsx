@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { showDrawer } from '../../redux/ui/drawer';
 
 import MapContainer from './MapContainer';
-import css from './MapContainer.css';
+import css from './index.css';
 
 const mapStateToProps = state => {
   const id = state.ui.map.selectedMapId;
