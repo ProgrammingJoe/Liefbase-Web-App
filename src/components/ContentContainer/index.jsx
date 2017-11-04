@@ -41,7 +41,7 @@ export default class ContentContainer extends Component {
             drawerTypes.map(d =>
               <Sidebar
                 key={d}
-                animation='slide along'
+                animation='overlay'
                 visible={activeDrawer === d}
                 className={css.sidebar}
               >

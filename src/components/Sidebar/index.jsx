@@ -47,11 +47,9 @@ export default class MenuSidebar extends React.Component {
       icon='labeled'
       vertical
       inverted
+      className={css.sideBarStyle}
     >
       <div className={css.menuStyle}>
-        <Menu.Item href="http://liefbase.io">
-          liefbase
-        </Menu.Item>
         <Menu.Item
           className={this.props.isCurrentUser ? '' : css.lastTopMenu}
           name='maps'
