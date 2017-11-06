@@ -71,9 +71,9 @@ export default class MapContainer extends Component {
         style={{ height: '100%', width: '100%' }}
         zoomControl={false}
       >
-        <ScaleControl position="bottomleft" />
-        <ZoomControl position="bottomleft" />
-        <LayersControl position='topleft'>
+        <ScaleControl position="bottomright" />
+        <ZoomControl position="bottomright" />
+        <LayersControl position='topright'>
           <LayersControl.BaseLayer name='OpenStreetMap' checked>
             <TileLayer
               url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -103,7 +103,7 @@ export default class MapContainer extends Component {
         {/* todo: only display this if member or admin of map */}
         <FeatureGroup>
           <EditControl
-            position='topleft'
+            position='topright'
             onCreated={this.handleCreate}
             draw={{
               circle: false,

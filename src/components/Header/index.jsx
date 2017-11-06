@@ -10,6 +10,8 @@ import {
 
 import { Menu } from 'semantic-ui-react';
 
+import css from './index.css';
+
 const mapStateToProps = state => ({
   isCurrentUser: Boolean(state.authorization.currentUserId),
 });
@@ -39,7 +41,10 @@ export default class Header extends Component {
   }
 
   render = () =>
-    <Menu style={{ margin: 0 }}>
+    <Menu className={css.headerStyle}>
+      <a position='left' className={css.branding} href="http://liefbase.io">
+        liefbase
+      </a>
       <Menu.Menu position='right'>
         {
           this.props.isCurrentUser ?

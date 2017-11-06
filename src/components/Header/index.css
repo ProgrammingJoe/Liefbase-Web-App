@@ -1,0 +1,16 @@
+.headerStyle {
+  width: 100%;
+  height: 42px;
+  margin: 0px !important;
+}
+
+.branding {
+  line-height: 42px;
+  padding: 0 8px;
+  font-size: 28px;
+  color: black;
+}
+.branding:hover {
+  color: black;
+  opacity: 0.7;
+}

@@ -1,5 +1,5 @@
 .mapContainer {
-  width: 100%;
+  width: calc(100% - 84px); /* full width minus left sidebar */
   height: 100vh;
   overflow: hidden;
 }

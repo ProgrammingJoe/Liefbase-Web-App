@@ -1,8 +1,13 @@
 .menuStyle {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 42px);
   background-color: #2159F9
+}
+
+.sideBarStyle {
+  top: 42px !important;
+  height: calc(100% - 42px) !important;
 }
 
 .lastTopMenu {
