@@ -1,6 +1,8 @@
+@import '../../constants';
+
 .contentContainer {
   position: absolute;
-  left: 84px;
+  left: $sidebar-width;
   width: 100%;
 }
 

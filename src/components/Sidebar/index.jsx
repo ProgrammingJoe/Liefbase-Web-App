@@ -8,7 +8,7 @@ import {
   showDrawer,
 } from '../../redux/ui/drawer';
 
-import css from './index.css';
+import styles from './index.scss';
 
 const mapStateToProps = state => ({
   isCurrentUser: Boolean(state.authorization.currentUserId),
@@ -47,11 +47,11 @@ export default class MenuSidebar extends React.Component {
       icon='labeled'
       vertical
       inverted
-      className={css.sideBarStyle}
+      className={styles.sideBarStyle}
     >
-      <div className={css.menuStyle}>
+      <div className={styles.menuStyle}>
         <Menu.Item
-          className={this.props.isCurrentUser ? '' : css.lastTopMenu}
+          className={this.props.isCurrentUser ? '' : styles.lastTopMenu}
           name='maps'
           onClick={this.handleClick}
           active={this.props.activeDrawer === 'maps'}
@@ -71,7 +71,7 @@ export default class MenuSidebar extends React.Component {
             <Menu.Item
               key='teams'
               name='teams'
-              className={css.lastTopMenu}
+              className={styles.lastTopMenu}
               onClick={this.handleClick}
               active={this.props.activeDrawer === 'teams'}
             >

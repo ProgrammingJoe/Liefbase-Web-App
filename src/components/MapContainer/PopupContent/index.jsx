@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 import { Popup } from 'react-leaflet';
 
-import css from './index.css';
+import styles from './index.scss';
 
 export default class PopupContent extends Component {
   static propTypes = {
@@ -88,16 +88,16 @@ export default class PopupContent extends Component {
           <p>Template: <b>{feature.properties.mapItemTemplate.name}</b></p>
           <p>Quantity: <b>{feature.properties.quantity}</b></p>
           <p>Last Updated: <b>{updatedDisplay}</b></p>
-          <div className={css.center}>
+          <div className={styles.center}>
             <Icon
-              className={css.clickable}
+              className={styles.clickable}
               name='edit'
               color='blue'
               size='large'
               onClick={() => this.props.showUpdateMapItem(feature)}
             />
             <Icon
-              className={css.clickable}
+              className={styles.clickable}
               name='remove circle'
               color='red'
               size='large'
