@@ -4,6 +4,7 @@
   position: absolute;
   left: $sidebar-width;
   width: 100%;
+  height: calc(100vh - #{$header-height});
 }
 
 .mapContent {

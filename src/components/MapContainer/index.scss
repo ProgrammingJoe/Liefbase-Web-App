@@ -2,7 +2,7 @@
 
 .mapContainer {
   width: calc(100% - $sidebar-width); /* full width minus left sidebar */
-  height: calc(100vh - $header-height);
+  height: calc(100vh - #{$header-height});
   overflow: hidden;
 }
 

@@ -3,13 +3,13 @@
 .menuStyle {
   display: flex;
   flex-direction: column;
-  height: calc(100% - $header-height);
+  height: calc(100% - #{$header-height});
   background-color: $liefbase-blue;
 }
 
 .sideBarStyle {
   top: $header-height !important;
-  height: calc(100% - $header-height) !important;
+  height: calc(100% - #{$header-height}) !important;
   background-color: $liefbase-blue !important;
 }
 
