@@ -1,11 +1,13 @@
+@import '../../constants';
+
 .headerStyle {
   width: 100%;
-  height: 42px;
+  height: $header-height;
   margin: 0px !important;
 }
 
 .branding {
-  line-height: 42px;
+  line-height: $header-height;
   padding: 0 8px;
   font-size: 28px;
   color: black;

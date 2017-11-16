@@ -137,6 +137,7 @@ module.exports = {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
+          /\.scss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -163,7 +164,25 @@ module.exports = {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
         loader: require.resolve('babel-loader'),
-
+      },
+      {
+        test: /\.scss$/,
+        use: [{
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            sourceMap: true,
+            localIdentName: "[local]___[hash:base64:5]",
+          },
+        }, {
+          loader: 'sass-loader',
+          options: {
+            outputStyle: "expanded",
+            sourceMap: true,
+          },
+        }]
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.

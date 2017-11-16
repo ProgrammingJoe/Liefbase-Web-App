@@ -1,7 +1,10 @@
+@import '../../constants';
+
 .contentContainer {
   position: absolute;
-  left: 84px;
+  left: $sidebar-width;
   width: 100%;
+  height: calc(100vh - #{$header-height});
 }
 
 .mapContent {

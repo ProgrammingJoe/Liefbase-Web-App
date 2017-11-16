@@ -1,0 +1,19 @@
+@import '../../constants';
+
+.menuStyle {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - #{$header-height});
+  background-color: $liefbase-blue;
+}
+
+.sideBarStyle {
+  top: $header-height !important;
+  height: calc(100% - #{$header-height}) !important;
+  background-color: $liefbase-blue !important;
+}
+
+.lastTopMenu {
+  border-bottom: solid 1px rgba(255, 255, 255, 0.08);
+  margin-bottom: auto;
+}

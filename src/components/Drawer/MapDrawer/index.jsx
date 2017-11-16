@@ -7,7 +7,7 @@ import actions from '../../../redux/entities/actionCreators';
 import { showUpdateMap, showCreateMapItemTemplate, showCreateMap } from '../../../redux/ui/modal';
 import { selectMap } from '../../../redux/ui/map';
 
-import css from './index.css';
+import styles from './index.scss';
 
 const mapStateToProps = state => ({
   maps: state.entities.reliefMap,
@@ -85,7 +85,7 @@ export default class MapDrawer extends Component {
           <div>
             <label>Selected Map</label>
             <Dropdown
-              className={css.content}
+              className={styles.content}
               placeholder='Select a Map'
               options={options}
               onChange={this.handleChange}
@@ -95,7 +95,7 @@ export default class MapDrawer extends Component {
               selection
             />
           </div>
-          <div className={css.content}>
+          <div className={styles.content}>
             <Button
               onClick={this.props.onClickCreateMap}
               color="blue"
@@ -105,11 +105,11 @@ export default class MapDrawer extends Component {
           </div>
           {
             selectedMap &&
-                <div className={css.label}>
+                <div className={styles.label}>
                   <label>Manage Map</label>
-                  <div className={css.content}>
+                  <div className={styles.content}>
                     <Icon
-                      className={css.clickable}
+                      className={styles.clickable}
                       name='add'
                       color='green'
                       size='big'
@@ -117,9 +117,9 @@ export default class MapDrawer extends Component {
                     />
                     <span>Add Template</span>
                   </div>
-                  <div className={css.content}>
+                  <div className={styles.content}>
                     <Icon
-                      className={css.clickable}
+                      className={styles.clickable}
                       name='edit'
                       color='blue'
                       size='big'
@@ -129,18 +129,18 @@ export default class MapDrawer extends Component {
                   </div>
                   {
                     this.state.deleteActive ?
-                      <div className={css.content}>
+                      <div className={styles.content}>
                         <Icon
-                          className={css.clickable}
+                          className={styles.clickable}
                           name='remove circle'
                           color='red'
                           size='big'
                           onClick={() => this.props.destroyMap(selectedMap)}
                         />
-                        <span className={css.dangerText}>Permanantly Delete Map?</span>
-                        <p className={css.safeText}>
+                        <span className={styles.dangerText}>Permanantly Delete Map?</span>
+                        <p className={styles.safeText}>
                           <Icon
-                            className={css.clickable}
+                            className={styles.clickable}
                             name='undo'
                             color='green'
                             size='big'
@@ -150,15 +150,15 @@ export default class MapDrawer extends Component {
                         </p>
                       </div>
                     :
-                      <div className={css.content}>
+                      <div className={styles.content}>
                         <Icon
-                          className={css.clickable}
+                          className={styles.clickable}
                           name='warning circle'
                           color='orange'
                           size='big'
                           onClick={() => this.setState({ deleteActive: true })}
                         />
-                        <span className={css.warningText}>Delete Map?</span>
+                        <span className={styles.warningText}>Delete Map?</span>
                       </div>
                   }
                 </div>

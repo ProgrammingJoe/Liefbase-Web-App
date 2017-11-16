@@ -123,6 +123,25 @@ module.exports = {
         ],
         include: paths.appSrc,
       },
+      {
+        test: /\.scss$/,
+        use: [{
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            sourceMap: true,
+            localIdentName: "[local]___[hash:base64:5]",
+          },
+        }, {
+          loader: 'sass-loader',
+          options: {
+            outputStyle: "expanded",
+            sourceMap: true,
+          },
+        }]
+      },
       // ** ADDING/UPDATING LOADERS **
       // The "file" loader handles all assets unless explicitly excluded.
       // The `exclude` list *must* be updated with every change to loader extensions.
@@ -137,6 +156,7 @@ module.exports = {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
+          /\.scss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,

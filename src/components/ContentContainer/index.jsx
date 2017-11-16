@@ -7,7 +7,7 @@ import { drawerTypes } from '../../redux/ui/drawer';
 
 import MapDrawer from '../Drawer/MapDrawer';
 import MapContainer from '../MapContainer';
-import css from './index.css';
+import styles from './index.scss';
 
 // Use style prop to override semantic css.
 const segmentStyle = {
@@ -35,7 +35,7 @@ export default class ContentContainer extends Component {
     };
 
     return (
-      <div className={css.contentContainer}>
+      <div className={styles.contentContainer}>
         <Sidebar.Pushable as={Segment} style={segmentStyle}>
           {
             drawerTypes.map(d =>
@@ -43,14 +43,14 @@ export default class ContentContainer extends Component {
                 key={d}
                 animation='overlay'
                 visible={activeDrawer === d}
-                className={css.sidebar}
+                className={styles.sidebar}
               >
                 {content[d]}
               </Sidebar>
             )
           }
           <Sidebar.Pusher>
-            <div className={css.mapContent}>
+            <div className={styles.mapContent}>
               <MapContainer />
             </div>
           </Sidebar.Pusher>

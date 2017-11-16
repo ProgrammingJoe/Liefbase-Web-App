@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { showDrawer } from '../../redux/ui/drawer';
 
 import MapContainer from './MapContainer';
-import css from './index.css';
+import styles from './index.scss';
 
 const mapStateToProps = state => {
   const id = state.ui.map.selectedMapId;
@@ -29,11 +29,11 @@ export default class Container extends Component {
   };
 
   renderPlaceHolder = () =>
-    <div className={css.placeHolderContainer}>
+    <div className={styles.placeHolderContainer}>
       <div>
         <p>No map selected</p>
         <a
-          className={css.clickable}
+          className={styles.clickable}
           onClick={this.props.showMapsDrawer}
         >
           Create 🗺 ?
@@ -45,7 +45,7 @@ export default class Container extends Component {
     const { map } = this.props;
 
     return (
-      <div className={css.mapContainer}>
+      <div className={styles.mapContainer}>
         { map ? <MapContainer /> : this.renderPlaceHolder() }
       </div>
     );
